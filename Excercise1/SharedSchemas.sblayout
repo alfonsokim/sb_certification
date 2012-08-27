@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application-layout>
+    <component name="Note">
+        <param name="gui:x" value="-203.0"/>
+        <param name="gui:y" value="-198.0"/>
+        <param name="gui:width" value="264.0"/>
+        <param name="gui:height" value="59.0"/>
+    </component>
+</application-layout>

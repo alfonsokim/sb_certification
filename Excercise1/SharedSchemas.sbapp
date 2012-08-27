@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="7.2.6">
+    <add generator="gui">
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <named-schemas>
+            <schema name="QuoteSchema">
+                <field description="" name="Symbol" type="string"/>
+                <field description="" name="Price" type="double"/>
+                <field description="" name="Quantity" type="int"/>
+                <field description="Time increases monotinocally in tuples received from the Caymann Exchange" name="Time" type="timestamp"/>
+            </schema>
+            <schema name="ExecutionRequestSchema">
+                <parent-schemas>
+                    <parent-schema name="QuoteSchema"/>
+                </parent-schemas>
+                <field description="" name="Position" type="string"/>
+                <field description="" name="TraderName" type="string"/>
+            </schema>
+        </named-schemas>
+        <gui.note name="Note">
+            <property name="description" value="Shared by multiple StreamBase applications. &#13;&#10;Has no eventflow logic"/>
+        </gui.note>
+    </add>
+</modify>

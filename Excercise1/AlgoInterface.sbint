@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="7.2.6">
+    <import alias="ExecutionRequestSchema" from="SharedSchemas.sbapp" item="ExecutionRequestSchema"/>
+    <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
+    <stream description="" name="QuoteInput" schema="QuoteSchema"/>
+    <output-stream description="" name="ExecutionRequestOutput" schema="ExecutionRequestSchema"/>
+</application>

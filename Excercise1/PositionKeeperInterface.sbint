@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="7.2.6">
+    <import alias="ExecutionRequestSchema" from="SharedSchemas.sbapp" item="ExecutionRequestSchema"/>
+    <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
+    <named-schemas>
+        <schema name="IndividualTraderSchema">
+            <field description="Must not be null nor empty string" name="TraderName" type="string"/>
+            <field description="Must not be null; default value is 0.0" name="Wealth" type="double"/>
+        </schema>
+        <schema name="PositionSchema">
+            <field description="" name="TraderName" type="string"/>
+            <field description="" name="Symbol" type="string"/>
+            <field description="" name="Price" type="double"/>
+            <field description="" name="Quantity" type="int"/>
+            <field description="" name="Position" type="string"/>
+            <field description="" name="Wealth" type="double"/>
+            <field description="" name="Time" type="timestamp"/>
+        </schema>
+    </named-schemas>
+    <table-schemas>
+        <table-schema name="PositionTableSchema" schema="PositionSchema">
+            <primary-index type="btree">
+                <field name="TraderName"/>
+            </primary-index>
+            <index index-type="btree">
+                <field name="Wealth"/>
+            </index>
+        </table-schema>
+    </table-schemas>
+    <stream description="" name="ExecutionRequestInput" schema="ExecutionRequestSchema"/>
+    <stream description="" name="IndividualTraderInput" schema="IndividualTraderSchema"/>
+    <output-stream description="" name="IndividualTraderOutput" schema="IndividualTraderSchema"/>
+    <output-stream description="" name="PositionOuput" schema="PositionSchema"/>
+</application>
