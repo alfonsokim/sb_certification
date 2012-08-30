@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application-layout>
+    <component name="InQuote">
+        <param name="gui:x" value="-632.0"/>
+        <param name="gui:y" value="-97.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="SlidingTime">
+        <param name="gui:x" value="-505.0"/>
+        <param name="gui:y" value="-97.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="398,476"/>
+    </component>
+    <component name="outStats">
+        <param name="gui:x" value="-374.0"/>
+        <param name="gui:y" value="-97.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+</application-layout>

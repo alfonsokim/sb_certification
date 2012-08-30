@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="7.2.6">
+    <add generator="gui">
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
+        <stream name="InQuote" schema="QuoteSchema">
+        </stream>
+        <box name="SlidingTuple" type="aggregate">
+            <input port="1" stream="InQuote"/>
+            <output port="1" stream="outStats"/>
+            <param name="dimension-name.0" value="TupleBasedDimm"/>
+            <param name="dimension-type.0" value="tuple"/>
+            <param name="dimension-advance.0" value="1"/>
+            <param name="dimension-partial.0" value="no"/>
+            <param name="dimension-size.0" value="10"/>
+            <param name="output-group-by" value="true"/>
+            <target-list>
+                <expressions>
+                    <include field="AvgPrice">avg(Price)</include>
+                    <include field="MaxPrice">max(Price)</include>
+                    <include field="MinPrice">min(Price)</include>
+                    <include field="StdPrice">stdev(Price)</include>
+                    <include field="lastPrice">lastval(Price)</include>
+                    <include field="LastQuantity">lastval(Quantity)</include>
+                    <include field="lastTime">lastval(Time)</include>
+                </expressions>
+            </target-list>
+            <param name="group-by-name.0" value="Symbol"/>
+            <param name="group-by.0" value="Symbol"/>
+        </box>
+        <output-stream name="outStats">
+        </output-stream>
+    </add>
+</modify>
