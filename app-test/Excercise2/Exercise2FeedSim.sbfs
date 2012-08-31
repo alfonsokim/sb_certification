@@ -21,7 +21,7 @@
         <DataSourceMapping/>
       </Fields>
       <Fields Name="Time" DataTypeName="timestamp" Description="Time increases monotinocally in tuples received from the Caymann Exchange">
-        <Distribution GenerationMethod="Incremented"/>
+        <Distribution GenerationMethod="Incremented" Cycle="true"/>
         <DataSourceMapping/>
       </Fields>
     </Schema>

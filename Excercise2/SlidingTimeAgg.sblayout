@@ -11,9 +11,9 @@
         <param name="gui:y" value="-97.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="398,476"/>
+        <param name="gui:columnwidths" value="128,86"/>
     </component>
-    <component name="outStats">
+    <component name="OutStats">
         <param name="gui:x" value="-374.0"/>
         <param name="gui:y" value="-97.0"/>
         <param name="gui:width" value="62.0"/>

@@ -9,7 +9,7 @@
         </stream>
         <box name="SlidingTime" type="aggregate">
             <input port="1" stream="InQuote"/>
-            <output port="1" stream="outStats"/>
+            <output port="1" stream="OutStats"/>
             <param name="dimension-name.0" value="TimeBasedDimm"/>
             <param name="dimension-type.0" value="time"/>
             <param name="dimension-advance.0" value="1"/>
@@ -30,7 +30,7 @@
             <param name="group-by-name.0" value="Symbol"/>
             <param name="group-by.0" value="Symbol"/>
         </box>
-        <output-stream name="outStats">
+        <output-stream name="OutStats">
         </output-stream>
     </add>
 </modify>
