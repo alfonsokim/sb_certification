@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="7.2.6">
+    <add generator="gui">
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
+        <parameter-definitions>
+            <parameter default="5" name="WINDOW_SIZE"/>
+        </parameter-definitions>
+        <schema name="schema:StatsQueryTable">
+            <parent-schemas>
+                <parent-schema name="QuoteSchema"/>
+            </parent-schemas>
+            <field description="" name="SymbolCount" type="int"/>
+        </schema>
+        <data name="StatsQueryTable" type="querytable">
+            <param name="primary-index-type" value="btree"/>
+            <param name="key.0" value="Symbol"/>
+            <param name="key.1" value="Price"/>
+            <param name="key.2" value="Quantity"/>
+            <param name="key.3" value="Time"/>
+            <param name="storage-method" value="memory"/>
+            <param name="schema" value="schema:StatsQueryTable"/>
+            <param name="replicated" value="false"/>
+            <param name="shared-table" value="none"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="InQuote" schema="QuoteSchema">
+        </stream>
+        <box name="QueryStatsUpdate" type="query">
+            <dataref id="querytable" name="StatsQueryTable"/>
+            <input port="1" stream="InQuote"/>
+            <output port="1" stream="out:QueryStatsUpdate_1"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="Symbol"/>
+            <param name="key-value.0" value="input1.Symbol"/>
+            <param name="key-field.1" value="Price"/>
+            <param name="key-value.1" value="input1.Price"/>
+            <param name="key-field.2" value="Quantity"/>
+            <param name="key-value.2" value="input1.Quantity"/>
+            <param name="key-field.3" value="Time"/>
+            <param name="key-value.3" value="input1.Time"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="Symbol">input1.Symbol</include>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="schema:StatsQueryTable" name="insert">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="count">1</set>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="schema:StatsQueryTable_logical_value" name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="schema:StatsQueryTable" name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="QueryFindStats" type="query">
+            <dataref id="querytable" name="StatsQueryTable"/>
+            <input port="1" stream="out:QueryStatsUpdate_1"/>
+            <output port="1" stream="out:QueryFindStats_1"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="current.Symbol = input1.Symbol"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none"/>
+                <expressions>
+                    <include field="Symbol">input1.Symbol</include>
+                    <include field="AvgPrice">avg(current.Price)</include>
+                    <include field="MaxPrice">max(current.Price)</include>
+                    <include field="MinPrice">min(current.Price)</include>
+                    <include field="SymbolCount">count(current.Symbol)</include>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="QuoteSchema" name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="QuoteSchema" name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="QuoteSchema" name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Filter10Symbols" type="filter">
+            <input port="1" stream="out:QueryFindStats_1"/>
+            <output port="1" stream="out:Filter10Symbols_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="SymbolCount == 5"/>
+        </box>
+        <box name="RemoveSymbolCount" type="map">
+            <input port="1" stream="out:Filter10Symbols_1"/>
+            <output port="1" stream="Debug"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <remove field="SymbolCount"/>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="Debug">
+        </output-stream>
+    </add>
+</modify>

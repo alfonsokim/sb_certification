@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application-layout>
+    <component name="StatsQueryTable">
+        <param name="gui:x" value="-669.0"/>
+        <param name="gui:y" value="9.0"/>
+        <param name="gui:width" value="168.0"/>
+        <param name="gui:height" value="63.0"/>
+    </component>
+    <component name="InQuote">
+        <param name="gui:x" value="-878.0"/>
+        <param name="gui:y" value="-124.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="QueryStatsUpdate">
+        <param name="gui:x" value="-616.0"/>
+        <param name="gui:y" value="-126.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="121,80,481;87,46,101,174,101,173;128,86"/>
+    </component>
+    <component name="QueryFindStats">
+        <param name="gui:x" value="-501.0"/>
+        <param name="gui:y" value="-125.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="210,140,844;152,81,177,305,177,302;128,86"/>
+    </component>
+    <component name="Filter10Symbols">
+        <param name="gui:x" value="-388.0"/>
+        <param name="gui:y" value="-125.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="114,568"/>
+    </component>
+    <component name="RemoveSymbolCount">
+        <param name="gui:x" value="-255.0"/>
+        <param name="gui:y" value="-125.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="Debug">
+        <param name="gui:x" value="-131.0"/>
+        <param name="gui:y" value="-124.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+</application-layout>
