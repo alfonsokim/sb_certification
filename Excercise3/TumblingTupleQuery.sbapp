@@ -8,6 +8,12 @@
         <parameter-definitions>
             <parameter default="3" name="WINDOW_SIZE"/>
         </parameter-definitions>
+        <schema name="schema:QuoteSchema">
+            <field description="" name="Symbol" type="string"/>
+            <field description="" name="Price" type="double"/>
+            <field description="" name="Quantity" type="int"/>
+            <field description="Time increases monotinocally in tuples received from the Caymann Exchange" name="Time" type="timestamp"/>
+        </schema>
         <schema name="schema:StatsQueryTable">
             <parent-schemas>
                 <parent-schema name="QuoteSchema"/>
@@ -28,7 +34,7 @@
             <param name="truncate" value="false"/>
             <preload format="csv" mode="empty"/>
         </data>
-        <stream name="InQuote" schema="QuoteSchema">
+        <stream name="InQuote" schema="schema:QuoteSchema">
         </stream>
         <box name="QueryStatsUpdate" type="query">
             <dataref id="querytable" name="StatsQueryTable"/>
@@ -37,11 +43,11 @@
             <param name="operation" value="write"/>
             <param name="where" value="primary-key"/>
             <param name="key-field.0" value="Symbol"/>
-            <param name="key-value.0" value="input1.Symbol"/>
+            <param name="key-value.0" value="Symbol"/>
             <param name="key-field.1" value="Price"/>
-            <param name="key-value.1" value="input1.Price"/>
+            <param name="key-value.1" value="Price"/>
             <param name="key-field.2" value="Quantity"/>
-            <param name="key-value.2" value="input1.Quantity"/>
+            <param name="key-value.2" value="Quantity"/>
             <param name="write-type" value="insert"/>
             <param name="if-write-fails" value="force"/>
             <param name="no-match-mode" value="output-no-match-null"/>
@@ -54,7 +60,7 @@
                     <include field="Symbol">input1.Symbol</include>
                 </expressions>
             </target-list>
-            <target-list goal-schema="schema:StatsQueryTable_logical_value" name="insert">
+            <target-list goal-schema="schema:StatsQueryTable" name="insert">
                 <item name="input" selection="all"/>
             </target-list>
             <target-list goal-schema="schema:StatsQueryTable" name="update">
@@ -112,16 +118,46 @@
             <input port="1" stream="out:QueryFindStats_1"/>
             <output port="1" stream="out:FilterWindow_1"/>
             <param name="autogen-nomatch-port" value="false"/>
-            <param name="expression.0" value="SymbolCount &gt;= ${WINDOW_SIZE}"/>
+            <param name="expression.0" value="SymbolCount == ${WINDOW_SIZE}"/>
+        </box>
+        <box name="SplitTruncate" type="split">
+            <input port="1" stream="out:FilterWindow_1"/>
+            <output port="1" stream="out:SplitTruncate_1"/>
+            <output port="2" stream="out:SplitTruncate_2"/>
+            <param name="output-count" value="2"/>
         </box>
         <box name="MapRemoveSymCount" type="map">
-            <input port="1" stream="out:FilterWindow_1"/>
+            <input port="1" stream="out:SplitTruncate_1"/>
             <output port="1" stream="outStats"/>
             <target-list>
                 <item name="input" selection="all"/>
                 <expressions>
                     <remove field="SymbolCount"/>
                 </expressions>
+            </target-list>
+        </box>
+        <box name="QueryTruncate" type="query">
+            <dataref id="querytable" name="StatsQueryTable"/>
+            <input port="1" stream="out:SplitTruncate_2"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="current.Symbol == input1.Symbol"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+            </target-list>
+            <target-list goal-schema="schema:StatsQueryTable" name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="schema:StatsQueryTable" name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="schema:StatsQueryTable" name="no-match">
+                <item name="input" selection="all"/>
             </target-list>
         </box>
         <output-stream name="outStats">
