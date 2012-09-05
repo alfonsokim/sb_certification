@@ -5,6 +5,9 @@
             <annotation name="hygienic"/>
         </annotations>
         <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
+        <parameter-definitions>
+            <parameter default="3" name="WINDOW_SIZE"/>
+        </parameter-definitions>
         <stream name="InQuote" schema="QuoteSchema">
         </stream>
         <box name="TumblingTuple" type="aggregate">
@@ -13,7 +16,7 @@
             <param name="dimension-name.0" value="TupleBasedDimm"/>
             <param name="dimension-type.0" value="predicate"/>
             <param name="dimension-partial.0" value="no"/>
-            <param name="dimension-close-predicate.0" value="count(input1.Symbol) == 10"/>
+            <param name="dimension-close-predicate.0" value="count(input1.Symbol) == ${WINDOW_SIZE}"/>
             <param name="output-group-by" value="true"/>
             <target-list>
                 <expressions>

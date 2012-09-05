@@ -5,6 +5,9 @@
             <annotation name="hygienic"/>
         </annotations>
         <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
+        <parameter-definitions>
+            <parameter default="3" name="WINDOW_SIZE"/>
+        </parameter-definitions>
         <stream name="InQuote" schema="QuoteSchema">
         </stream>
         <box name="SlidingTuple" type="aggregate">
@@ -14,7 +17,7 @@
             <param name="dimension-type.0" value="tuple"/>
             <param name="dimension-advance.0" value="1"/>
             <param name="dimension-partial.0" value="no"/>
-            <param name="dimension-size.0" value="10"/>
+            <param name="dimension-size.0" value="${WINDOW_SIZE}"/>
             <param name="output-group-by" value="true"/>
             <target-list>
                 <expressions>
