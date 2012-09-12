@@ -1,7 +1,9 @@
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -12,6 +14,9 @@ import java.util.Map;
  */
 public class TestQuoteTupleCSVGenerator {
 	
+	private Calendar timeCalendar;
+	private Map<String, QuoteData> quotes;
+	
 	/**
 	 * Representation of a QuoteSchema 
 	 */
@@ -19,7 +24,7 @@ public class TestQuoteTupleCSVGenerator {
 		public String symbol;
 		public double price;
 		public int quantity;
-		public Calendar timeCalendar;
+		public int tupleCount;
 		
 		/**
 		 * Creates a new QuoteData with given symbol and default price and quantity = 10
@@ -31,7 +36,7 @@ public class TestQuoteTupleCSVGenerator {
 			this.symbol = symbol;
 			this.price = 10D;
 			this.quantity = 10;
-			this.timeCalendar = Calendar.getInstance();
+			this.tupleCount = 0;
 		}
 		
 		/**
@@ -41,25 +46,30 @@ public class TestQuoteTupleCSVGenerator {
 		 * @param quantityInc quantity increment
 		 * @param secondsInc seconds increment
 		 */
-		private void increase(double priceInc, int quantityInc, int secondsInc){
+		private QuoteData increase(double priceInc, int quantityInc){
 			this.price += priceInc;
 			this.quantity += quantityInc;
-			this.timeCalendar.add(Calendar.SECOND, secondsInc);
+			return this;
 		}
 		
-		@Override
-		public String toString(){
+		/**
+		 * @param sendDate The date for the time field
+		 * @return the CSV representation of the symbol, with the time field updated to sendDate
+		 */
+		private String toCSVTuple(Date sendDate){
 			return new StringBuilder()
-				.append(symbol).append(",")
-				.append(price).append(",")
-				.append(quantity).append(",")
-				.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").format(timeCalendar.getTime()))
-				.toString();
+			.append(symbol).append(",")
+			.append(price).append(",")
+			.append(quantity).append(",")
+			.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").format(sendDate))
+			.toString();
 		}
+		
 		
 	}
 	
-	private Map<String, QuoteData> quotes;
+	//**********************************************************************************************************
+	
 
 	/**
 	 * Creates a TestQuoteTupleCSVGenerator whit given symbols
@@ -71,6 +81,28 @@ public class TestQuoteTupleCSVGenerator {
 		for(String symbol : symbols){
 			quotes.put(symbol, new QuoteData(symbol));
 		}
+		this.timeCalendar = Calendar.getInstance();
+	}
+	
+	/**
+	 * @return The declared symbols
+	 */
+	public Set<String> getSymbols(){
+		return quotes.keySet();
+	}
+	
+	/**
+	 * @return Last time a tuple was returned
+	 */
+	public String getLastTimeWithFormat(){
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").format(timeCalendar.getTime());
+	}
+	
+	public int getSymbolCount(String symbol){
+		if (quotes.containsKey(symbol)){
+			return quotes.get(symbol).tupleCount;
+		}
+		return -1;
 	}
 	
 	
@@ -87,8 +119,9 @@ public class TestQuoteTupleCSVGenerator {
 	public String nextQuote(String symbol, double priceInc, int quantityInc, int secondsInc){
 		if (quotes.containsKey(symbol)){
 			QuoteData quote = quotes.get(symbol);
-			quote.increase(priceInc, quantityInc, secondsInc);
-			return quote.toString();
+			timeCalendar.add(Calendar.SECOND, secondsInc);
+			quote.tupleCount += 1;
+			return quote.increase(priceInc, quantityInc).toCSVTuple(timeCalendar.getTime());
 		}
 		return "";
 	}
