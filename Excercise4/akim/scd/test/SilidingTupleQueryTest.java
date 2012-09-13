@@ -1,3 +1,4 @@
+package akim.scd.test;
 import java.util.Random;
 
 import org.junit.After;
@@ -14,13 +15,14 @@ import com.streambase.sb.unittest.SBServerManager;
 import com.streambase.sb.unittest.ServerManagerFactory;
 
 
-public class SlidingTupleAggTest {
+public class SilidingTupleQueryTest {
 
 	private static SBServerManager server;
 	private static Enqueuer qouteEnqueuer;
 	private static Expecter statsExpecter;
 	private static TestQuoteTupleCSVGenerator tupleGenerator;
 	private final static int WINDOW_SIZE = 10;
+	private final static int SECOND = 1000;
 
 	@BeforeClass
 	public static void setupServer() throws Exception {
@@ -56,7 +58,7 @@ public class SlidingTupleAggTest {
 	 * receiving tuples when the window closes.
 	 */
 	@Test
-	public void testSingleSymbolByHand() throws Exception {
+	public void testSingleSymbol() throws Exception {
 		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,1,11,2012-08-01 11:00:00.000-0500");
 		statsExpecter.expectNothing();
 		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,2,11,2012-08-01 12:00:00.000-0500");
@@ -96,10 +98,10 @@ public class SlidingTupleAggTest {
 	public void testSequentialSingleSymbol() throws Exception {
 		for (String symbol: tupleGenerator.getSymbols()){
 			for (int i = 0; i < WINDOW_SIZE-1; i++){
-				qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tupleGenerator.nextQuote(symbol, 0, 0, 60));
+				qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tupleGenerator.nextQuote(symbol, 0, 0, SECOND));
 				statsExpecter.expectNothing();
 			}
-			qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tupleGenerator.nextQuote(symbol, 0, 0, 60));
+			qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tupleGenerator.nextQuote(symbol, 0, 0, SECOND));
 			statsExpecter.expect(ObjectArrayTupleMaker.MAKER, buildGenericResultTupleObject(symbol));
 		}
 	}
@@ -113,8 +115,8 @@ public class SlidingTupleAggTest {
 		Random random = new Random();
 		for (int i = 0; i < 1000; i++){
 			String symbol = (String)testingSymbols[random.nextInt(testingSymbols.length)];
-			qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tupleGenerator.nextQuote(symbol, 0, 0, 60));
-			if (tupleGenerator.getSymbolCount(symbol) >= WINDOW_SIZE){
+			qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tupleGenerator.nextQuote(symbol, 0, 0, SECOND));
+			if (tupleGenerator.getCountSimboleFired(symbol) >= WINDOW_SIZE){
 				statsExpecter.expect(ObjectArrayTupleMaker.MAKER, buildGenericResultTupleObject(symbol));
 			} else {
 				statsExpecter.expectNothing();

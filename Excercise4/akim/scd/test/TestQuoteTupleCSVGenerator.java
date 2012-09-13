@@ -1,3 +1,4 @@
+package akim.scd.test;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,7 +49,7 @@ public class TestQuoteTupleCSVGenerator {
 	 * @param symbol The symbol name to check
 	 * @return		 The times a symbol has been fired, -1 if the symbol name is not in declared
 	 */
-	public int getSymbolCount(String symbol){
+	public int getCountSimboleFired(String symbol){
 		if (quotes.containsKey(symbol)){
 			return quotes.get(symbol).tupleCount;
 		}
@@ -66,8 +67,8 @@ public class TestQuoteTupleCSVGenerator {
 	 * 
 	 * @return the CSV representation of the quote identified by symbol, empty string if symbol not found
 	 */
-	public String nextQuote(String symbol, double priceInc, int quantityInc, int secondsInc){
-		timeCalendar.add(Calendar.SECOND, secondsInc);
+	public String nextQuote(String symbol, double priceInc, int quantityInc, int millisecsInc){
+		timeCalendar.add(Calendar.MILLISECOND, millisecsInc);
 		if (quotes.containsKey(symbol)){
 			QuoteData quote = quotes.get(symbol);
 			quote.tupleCount += 1;

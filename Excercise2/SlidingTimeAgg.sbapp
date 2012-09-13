@@ -5,6 +5,9 @@
             <annotation name="hygienic"/>
         </annotations>
         <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
+        <parameter-definitions>
+            <parameter default="10" name="WINDOW_SIZE"/>
+        </parameter-definitions>
         <stream name="InQuote" schema="QuoteSchema">
         </stream>
         <box name="SlidingTime" type="aggregate">
@@ -15,7 +18,7 @@
             <param name="dimension-value.0" value="Time"/>
             <param name="dimension-advance.0" value="1"/>
             <param name="dimension-partial.0" value="yes"/>
-            <param name="dimension-size.0" value="10"/>
+            <param name="dimension-size.0" value="${WINDOW_SIZE}"/>
             <param name="output-group-by" value="true"/>
             <target-list>
                 <expressions>

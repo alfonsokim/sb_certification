@@ -6,7 +6,7 @@
         </annotations>
         <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
         <parameter-definitions>
-            <parameter default="3" name="WINDOW_SIZE"/>
+            <parameter default="10" name="WINDOW_SIZE"/>
         </parameter-definitions>
         <stream name="InQuote" schema="QuoteSchema">
         </stream>

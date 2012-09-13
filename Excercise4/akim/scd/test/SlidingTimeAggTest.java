@@ -1,3 +1,5 @@
+package akim.scd.test;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,9 +19,7 @@ public class SlidingTimeAggTest {
 	private static SBServerManager server;
 	private static Enqueuer qouteEnqueuer;
 	private static Expecter statsExpecter;
-	private static TestQuoteTupleCSVGenerator tupleGenerator;
-	private final static int SECOND = 1;
-	private final static int WINDOW_SIZE_IN_SECONDS = 10;
+	//private static TestQuoteTupleCSVGenerator tupleGenerator;
 
 	@BeforeClass
 	public static void setupServer() throws Exception {
@@ -41,11 +41,11 @@ public class SlidingTimeAggTest {
 		server.startContainers();
 		qouteEnqueuer = server.getEnqueuer("InQuote");
 		statsExpecter = new Expecter(server.getDequeuer("OutStats"));
-		tupleGenerator = new TestQuoteTupleCSVGenerator("AAA", "BBB", "CCC", "DDD", "EEE");
+		//tupleGenerator = new TestQuoteTupleCSVGenerator("AAA", "BBB", "CCC", "DDD", "EEE");
 	}
 
 	@Test
-	public void testSingleSymbolByHand() throws Exception {
+	public void testSingleSymbol() throws Exception {
 		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,1,10,2012-08-01 10:00:01.000-0500");
 		statsExpecter.expectNothing();
 		
@@ -79,14 +79,6 @@ public class SlidingTimeAggTest {
 		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,10,20,2012-08-01 10:00:11.000-0500");	
 		statsExpecter.expect(JSONSingleQuotesTupleMaker.MAKER, "{'Symbol':'AAA','AvgPrice':5.5,'MaxPrice':10.0,'MinPrice':1.0,'StdPrice':3.0276503540974917,'LastPrice':10.0,'LastQuantity':20,'LastTime':'2012-08-01 10:00:10.000-0500'}");
 		
-	}
-	
-	/**
-	 * Test sequential tuples. The tuple after 10 seconds (window size) must close and emit the window
-	 */
-	@Test
-	public void testSequentialSingleSymbol() throws Exception {
-
 	}
 	
 

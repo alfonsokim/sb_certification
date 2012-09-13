@@ -5,6 +5,9 @@
             <annotation name="hygienic"/>
         </annotations>
         <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
+        <parameter-definitions>
+            <parameter default="10" name="WINDOW_SIZE"/>
+        </parameter-definitions>
         <stream name="InQuote" schema="QuoteSchema">
         </stream>
         <box name="TumblingTime" type="aggregate">
@@ -13,7 +16,7 @@
             <param name="dimension-name.0" value="TimeBasedDimm"/>
             <param name="dimension-type.0" value="predicate"/>
             <param name="dimension-partial.0" value="no"/>
-            <param name="dimension-close-predicate.0" value="(lastval(input1.Time) - firstval(input1.Time)) &gt;= seconds(10)"/>
+            <param name="dimension-close-predicate.0" value="(lastval(input1.Time) - firstval(input1.Time)) &gt;= seconds(${WINDOW_SIZE})"/>
             <param name="output-group-by" value="true"/>
             <target-list>
                 <expressions>
