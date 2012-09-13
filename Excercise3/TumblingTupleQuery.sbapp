@@ -56,6 +56,7 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
                 <expressions>
                     <include field="Symbol">input1.Symbol</include>
                 </expressions>
@@ -92,6 +93,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
                 <expressions>
                     <include field="Symbol">input1.Symbol</include>
                     <include field="AvgPrice">avg(current.Price)</include>
@@ -128,7 +130,7 @@
         </box>
         <box name="MapRemoveSymCount" type="map">
             <input port="1" stream="out:SplitTruncate_1"/>
-            <output port="1" stream="outStats"/>
+            <output port="1" stream="OutStats"/>
             <target-list>
                 <item name="input" selection="all"/>
                 <expressions>
@@ -149,6 +151,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list goal-schema="schema:StatsQueryTable" name="insert">
                 <item name="input" selection="all"/>
@@ -160,7 +163,7 @@
                 <item name="input" selection="all"/>
             </target-list>
         </box>
-        <output-stream name="outStats">
+        <output-stream name="OutStats">
         </output-stream>
     </add>
 </modify>

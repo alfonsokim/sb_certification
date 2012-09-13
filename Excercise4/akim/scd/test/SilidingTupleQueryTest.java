@@ -28,7 +28,7 @@ public class SilidingTupleQueryTest {
 	public static void setupServer() throws Exception {
 		server = ServerManagerFactory.getEmbeddedServer();
 		server.startServer();
-		server.loadApp("SlidingTupleAgg.sbapp");
+		server.loadApp("SilidingTupleQuery.sbapp");
 		
 	}
 

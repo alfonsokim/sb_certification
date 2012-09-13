@@ -29,7 +29,7 @@ public class TumblingTupleQueryTest {
 	public static void setupServer() throws Exception {
 		server = ServerManagerFactory.getEmbeddedServer();
 		server.startServer();
-		server.loadApp("TumblingTupleAgg.sbapp");
+		server.loadApp("TumblingTupleQuery.sbapp");
 	}
 
 	@AfterClass

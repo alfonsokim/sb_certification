@@ -17,21 +17,18 @@
         <param name="gui:y" value="-119.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="210,139,845;152,81,178,305,178,300;128,86"/>
     </component>
     <component name="QueryFindStats">
         <param name="gui:x" value="-952.0"/>
         <param name="gui:y" value="-119.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="212,141,841;199,175,176,305,176,163;128,86"/>
     </component>
     <component name="FilterWindow">
         <param name="gui:x" value="-831.0"/>
         <param name="gui:y" value="-119.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="146,728"/>
     </component>
     <component name="MapRemoveSymCount">
         <param name="gui:x" value="-722.0"/>
@@ -39,7 +36,7 @@
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
     </component>
-    <component name="outStats">
+    <component name="OutStats">
         <param name="gui:x" value="-602.0"/>
         <param name="gui:y" value="-119.0"/>
         <param name="gui:width" value="62.0"/>
