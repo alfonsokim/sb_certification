@@ -124,7 +124,6 @@ public class SlidingTupleAggTest {
 
 	@After
 	public void stopContainers() throws Exception {
-		// after each test, dispose of the container instances
 		server.stopContainers();
 	}
 	

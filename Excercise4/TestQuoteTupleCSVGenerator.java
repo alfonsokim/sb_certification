@@ -14,8 +14,69 @@ import java.util.Set;
  */
 public class TestQuoteTupleCSVGenerator {
 	
-	private Calendar timeCalendar;
 	private Map<String, QuoteData> quotes;
+	private Calendar timeCalendar;
+
+	/**
+	 * Creates a TestQuoteTupleCSVGenerator whit given symbols
+	 * 
+	 * @param symbols Symbols to use in the test
+	 */
+	public TestQuoteTupleCSVGenerator(String... symbols) {
+		quotes = new HashMap<String, QuoteData>();
+		for(String symbol : symbols){
+			quotes.put(symbol, new QuoteData(symbol));
+		}
+		this.timeCalendar = Calendar.getInstance();
+	}
+	
+	/**
+	 * @return The declared symbols
+	 */
+	public Set<String> getSymbols(){
+		return quotes.keySet();
+	}
+	
+	/**
+	 * @return Last time a tuple was returned
+	 */
+	public String getLastTimeWithFormat(){
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").format(timeCalendar.getTime());
+	}
+	
+	/**
+	 * @param symbol The symbol name to check
+	 * @return		 The times a symbol has been fired, -1 if the symbol name is not in declared
+	 */
+	public int getSymbolCount(String symbol){
+		if (quotes.containsKey(symbol)){
+			return quotes.get(symbol).tupleCount;
+		}
+		return -1;
+	}
+	
+	
+	/**
+	 * Increases a quote values and returns its string representation
+	 * 
+	 * @param symbol symbol name to increment
+	 * @param priceInc price increment
+	 * @param quantityInc quantity increment
+	 * @param secondsInc seconds increment
+	 * 
+	 * @return the CSV representation of the quote identified by symbol, empty string if symbol not found
+	 */
+	public String nextQuote(String symbol, double priceInc, int quantityInc, int secondsInc){
+		timeCalendar.add(Calendar.SECOND, secondsInc);
+		if (quotes.containsKey(symbol)){
+			QuoteData quote = quotes.get(symbol);
+			quote.tupleCount += 1;
+			return quote.increase(priceInc, quantityInc).toCSVTuple(timeCalendar.getTime());
+		}
+		throw new IllegalArgumentException(symbol + " was not declared in this generator");
+	}
+	
+	//**********************************************************************************************************
 	
 	/**
 	 * Representation of a QuoteSchema 
@@ -68,64 +129,5 @@ public class TestQuoteTupleCSVGenerator {
 		
 	}
 	
-	//**********************************************************************************************************
-	
-
-	/**
-	 * Creates a TestQuoteTupleCSVGenerator whit given symbols
-	 * 
-	 * @param symbols Symbols to use in the test
-	 */
-	public TestQuoteTupleCSVGenerator(String... symbols) {
-		quotes = new HashMap<String, QuoteData>();
-		for(String symbol : symbols){
-			quotes.put(symbol, new QuoteData(symbol));
-		}
-		this.timeCalendar = Calendar.getInstance();
-	}
-	
-	/**
-	 * @return The declared symbols
-	 */
-	public Set<String> getSymbols(){
-		return quotes.keySet();
-	}
-	
-	/**
-	 * @return Last time a tuple was returned
-	 */
-	public String getLastTimeWithFormat(){
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").format(timeCalendar.getTime());
-	}
-	
-	public int getSymbolCount(String symbol){
-		if (quotes.containsKey(symbol)){
-			return quotes.get(symbol).tupleCount;
-		}
-		return -1;
-	}
-	
-	
-	/**
-	 * Increases a quote values and returns its string representation
-	 * 
-	 * @param symbol symbol name to increment
-	 * @param priceInc price increment
-	 * @param quantityInc quantity increment
-	 * @param secondsInc seconds increment
-	 * 
-	 * @return the CSV representation of the quote identified by symbol, empty string if symbol not found
-	 */
-	public String nextQuote(String symbol, double priceInc, int quantityInc, int secondsInc){
-		if (quotes.containsKey(symbol)){
-			QuoteData quote = quotes.get(symbol);
-			timeCalendar.add(Calendar.SECOND, secondsInc);
-			quote.tupleCount += 1;
-			return quote.increase(priceInc, quantityInc).toCSVTuple(timeCalendar.getTime());
-		}
-		return "";
-	}
-	
-
 
 }
