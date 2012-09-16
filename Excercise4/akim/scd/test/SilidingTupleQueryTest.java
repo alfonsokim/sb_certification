@@ -59,25 +59,25 @@ public class SilidingTupleQueryTest {
 	 */
 	@Test
 	public void testSingleSymbol() throws Exception {
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,1,11,2012-08-01 11:00:00.000-0500");
+		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,1,10,2012-08-01 10:00:01.000-0500");
 		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,2,11,2012-08-01 12:00:00.000-0500");
+		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,2,11,2012-08-01 10:00:02.000-0500");
 		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,3,13,2012-08-01 13:00:00.000-0500");
+		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,3,13,2012-08-01 10:00:03.000-0500");
 		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,4,14,2012-08-01 14:00:00.000-0500");
+		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,4,14,2012-08-01 10:00:04.000-0500");
 		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,5,15,2012-08-01 15:00:00.000-0500");
+		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,5,15,2012-08-01 10:00:05.000-0500");
 		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,6,16,2012-08-01 16:00:00.000-0500");
+		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,6,16,2012-08-01 10:00:06.000-0500");
 		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,7,17,2012-08-01 17:00:00.000-0500");
+		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,7,17,2012-08-01 10:00:07.000-0500");
 		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,8,18,2012-08-01 18:00:00.000-0500");
+		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,8,18,2012-08-01 10:00:08.000-0500");
 		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,9,19,2012-08-01 19:00:00.000-0500");
+		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,9,19,2012-08-01 10:00:09.000-0500");
 		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,10,20,2012-08-01 20:00:00.000-0500");
+		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,10,20,2012-08-01 10:00:10.000-0500");
 		statsExpecter.expect(ObjectArrayTupleMaker.MAKER, new Object[] { 
 				"AAA",		// Symbol 
 				"5.5",		// AvgPrice
@@ -86,7 +86,7 @@ public class SilidingTupleQueryTest {
 				"3.0276503540974917",		// StdPrice
 				"10",		// LastPrice
 				"20",		// LastQunatity
-				"2012-08-01 20:00:00.000-0500",		// LastTime
+				"2012-08-01 10:00:10.000-0500",		// LastTime
 				} );
 
 	}
@@ -115,8 +115,11 @@ public class SilidingTupleQueryTest {
 		Random random = new Random();
 		for (int i = 0; i < 1000; i++){
 			String symbol = (String)testingSymbols[random.nextInt(testingSymbols.length)];
-			qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tupleGenerator.nextQuote(symbol, 0, 0, SECOND));
-			if (tupleGenerator.getCountSimboleFired(symbol) >= WINDOW_SIZE){
+			String tuple = tupleGenerator.nextQuote(symbol, 0, 0, SECOND);
+			System.out.println("Envio: " + tuple);
+			qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tuple);
+			if (tupleGenerator.getCountSimbolFired(symbol) >= WINDOW_SIZE){
+				System.out.println("Emmit con fecha " + tupleGenerator.getLastTimeWithFormat());
 				statsExpecter.expect(ObjectArrayTupleMaker.MAKER, buildGenericResultTupleObject(symbol));
 			} else {
 				statsExpecter.expectNothing();

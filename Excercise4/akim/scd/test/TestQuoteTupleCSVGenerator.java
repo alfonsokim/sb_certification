@@ -49,7 +49,7 @@ public class TestQuoteTupleCSVGenerator {
 	 * @param symbol The symbol name to check
 	 * @return		 The times a symbol has been fired, -1 if the symbol name is not in declared
 	 */
-	public int getCountSimboleFired(String symbol){
+	public int getCountSimbolFired(String symbol){
 		if (quotes.containsKey(symbol)){
 			return quotes.get(symbol).tupleCount;
 		}

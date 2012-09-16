@@ -17,12 +17,14 @@
         <param name="gui:y" value="-94.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="120,80,482;87,46,101,173,101,174;128,86"/>
     </component>
     <component name="QueryFindStats">
         <param name="gui:x" value="-241.0"/>
         <param name="gui:y" value="-94.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="120,80,482;87,46,101,173,101,174;128,86"/>
     </component>
     <component name="FilterWindow">
         <param name="gui:x" value="-120.0"/>

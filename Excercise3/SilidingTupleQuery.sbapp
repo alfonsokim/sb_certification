@@ -6,19 +6,22 @@
         </annotations>
         <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
         <parameter-definitions>
-            <parameter default="3" name="WINDOW_SIZE"/>
+            <parameter default="10" name="WINDOW_SIZE"/>
         </parameter-definitions>
         <schema name="schema:StatsQueryTable">
             <parent-schemas>
                 <parent-schema name="QuoteSchema"/>
             </parent-schemas>
-            <field description="Count for current symbol" name="SymbolCount" type="int"/>
+        </schema>
+        <schema name="schema:indebug">
+            <field description="" name="Symbol" type="string"/>
         </schema>
         <data name="StatsQueryTable" type="querytable">
             <param name="primary-index-type" value="btree"/>
             <param name="key.0" value="Symbol"/>
             <param name="key.1" value="Price"/>
             <param name="key.2" value="Quantity"/>
+            <param name="key.3" value="Time"/>
             <param name="index-type.0" value="btree"/>
             <param name="index.0" value="Time,Symbol"/>
             <param name="storage-method" value="memory"/>
@@ -30,6 +33,33 @@
         </data>
         <stream name="InQuote" schema="QuoteSchema">
         </stream>
+        <stream name="indebug" schema="schema:indebug">
+        </stream>
+        <box name="Query" type="query">
+            <dataref id="querytable" name="StatsQueryTable"/>
+            <input port="1" stream="indebug"/>
+            <output port="1" stream="outall"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="input1.Symbol == current.Symbol"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all"/>
+            </target-list>
+            <target-list goal-schema="schema:StatsQueryTable" name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="schema:StatsQueryTable" name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="schema:StatsQueryTable" name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
         <box name="QueryStatsUpdate" type="query">
             <dataref id="querytable" name="StatsQueryTable"/>
             <input port="1" stream="InQuote"/>
@@ -42,6 +72,8 @@
             <param name="key-value.1" value="input1.Price"/>
             <param name="key-field.2" value="Quantity"/>
             <param name="key-value.2" value="input1.Quantity"/>
+            <param name="key-field.3" value="Time"/>
+            <param name="key-value.3" value="input1.Time"/>
             <param name="write-type" value="insert"/>
             <param name="if-write-fails" value="force"/>
             <param name="no-match-mode" value="output-no-match-null"/>
@@ -68,7 +100,7 @@
         <box name="QueryFindStats" type="query">
             <dataref id="querytable" name="StatsQueryTable"/>
             <input port="1" stream="out:QueryStatsUpdate_1"/>
-            <output port="1" stream="out:QueryFindStats_1"/>
+            <output port="1" stream="debug"/>
             <param name="operation" value="read"/>
             <param name="where" value="secondary-key"/>
             <param name="limit" value="${WINDOW_SIZE}"/>
@@ -81,22 +113,21 @@
             <param name="write-type" value="insert"/>
             <param name="if-write-fails" value="ignore"/>
             <param name="no-match-mode" value="output-no-match-null"/>
-            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-direction" value="ascending"/>
             <param name="order-by-key-field.0" value="Time"/>
             <param name="order-by-key-field.1" value="Symbol"/>
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
-                <item name="old" selection="none"/>
                 <expressions>
                     <include field="Symbol">input1.Symbol</include>
-                    <include field="AvgPrice">avg(current.Price)</include>
-                    <include field="MaxPrice">max(current.Price)</include>
-                    <include field="MinPrice">min(current.Price)</include>
-                    <include field="StdPrice">stdev(current.Price)</include>
-                    <include field="LastPrice">lastval(current.Price)</include>
-                    <include field="LastQuantity">lastval(current.Quantity)</include>
-                    <include field="LastTime">lastval(current.Time)</include>
+                    <include field="AvgPrice">avg(Price)</include>
+                    <include field="MaxPrice">max(Price)</include>
+                    <include field="MinPrice">min(Price)</include>
+                    <include field="StdPrice">stdev(Price)</include>
+                    <include field="LastPrice">lastval(Price)</include>
+                    <include field="LastQuantity">lastval(Quantity)</include>
+                    <include field="LastTime">max(Time)</include>
                     <include field="SymbolCount">count(current.Symbol)</include>
                 </expressions>
             </target-list>
@@ -110,12 +141,16 @@
                 <item name="input" selection="all"/>
             </target-list>
         </box>
+        <output-stream name="outall">
+        </output-stream>
         <box name="FilterWindow" type="filter">
-            <input port="1" stream="out:QueryFindStats_1"/>
+            <input port="1" stream="debug"/>
             <output port="1" stream="out:FilterWindow_1"/>
             <param name="autogen-nomatch-port" value="false"/>
             <param name="expression.0" value="SymbolCount &gt;= ${WINDOW_SIZE}"/>
         </box>
+        <output-stream name="debug">
+        </output-stream>
         <box name="MapRemoveSymCount" type="map">
             <input port="1" stream="out:FilterWindow_1"/>
             <output port="1" stream="OutStats"/>

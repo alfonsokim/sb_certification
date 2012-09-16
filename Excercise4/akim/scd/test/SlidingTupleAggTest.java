@@ -116,7 +116,7 @@ public class SlidingTupleAggTest {
 		for (int i = 0; i < 1000; i++){
 			String symbol = (String)testingSymbols[random.nextInt(testingSymbols.length)];
 			qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tupleGenerator.nextQuote(symbol, 0, 0, SECOND));
-			if (tupleGenerator.getCountSimboleFired(symbol) >= WINDOW_SIZE){
+			if (tupleGenerator.getCountSimbolFired(symbol) >= WINDOW_SIZE){
 				statsExpecter.expect(ObjectArrayTupleMaker.MAKER, buildGenericResultTupleObject(symbol));
 			} else {
 				statsExpecter.expectNothing();

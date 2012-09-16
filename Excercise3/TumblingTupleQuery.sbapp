@@ -6,7 +6,7 @@
         </annotations>
         <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
         <parameter-definitions>
-            <parameter default="3" name="WINDOW_SIZE"/>
+            <parameter default="10" name="WINDOW_SIZE"/>
         </parameter-definitions>
         <schema name="schema:QuoteSchema">
             <field description="" name="Symbol" type="string"/>
@@ -18,13 +18,13 @@
             <parent-schemas>
                 <parent-schema name="QuoteSchema"/>
             </parent-schemas>
-            <field description="Count for current symbol" name="SymbolCount" type="int"/>
         </schema>
         <data name="StatsQueryTable" type="querytable">
             <param name="primary-index-type" value="btree"/>
             <param name="key.0" value="Symbol"/>
             <param name="key.1" value="Price"/>
             <param name="key.2" value="Quantity"/>
+            <param name="key.3" value="Time"/>
             <param name="index-type.0" value="btree"/>
             <param name="index.0" value="Time,Symbol"/>
             <param name="storage-method" value="memory"/>
@@ -48,6 +48,8 @@
             <param name="key-value.1" value="Price"/>
             <param name="key-field.2" value="Quantity"/>
             <param name="key-value.2" value="Quantity"/>
+            <param name="key-field.3" value="Time"/>
+            <param name="key-value.3" value="Time"/>
             <param name="write-type" value="insert"/>
             <param name="if-write-fails" value="force"/>
             <param name="no-match-mode" value="output-no-match-null"/>
@@ -56,12 +58,11 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
-                <item name="current" selection="none"/>
                 <expressions>
                     <include field="Symbol">input1.Symbol</include>
                 </expressions>
             </target-list>
-            <target-list goal-schema="schema:StatsQueryTable" name="insert">
+            <target-list goal-schema="schema:StatsQueryTable_logical_value" name="insert">
                 <item name="input" selection="all"/>
             </target-list>
             <target-list goal-schema="schema:StatsQueryTable" name="update">
@@ -87,13 +88,12 @@
             <param name="write-type" value="insert"/>
             <param name="if-write-fails" value="ignore"/>
             <param name="no-match-mode" value="output-no-match-null"/>
-            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-direction" value="ascending"/>
             <param name="order-by-key-field.0" value="Time"/>
             <param name="order-by-key-field.1" value="Symbol"/>
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
-                <item name="old" selection="none"/>
                 <expressions>
                     <include field="Symbol">input1.Symbol</include>
                     <include field="AvgPrice">avg(current.Price)</include>
@@ -152,6 +152,7 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list goal-schema="schema:StatsQueryTable" name="insert">
                 <item name="input" selection="all"/>

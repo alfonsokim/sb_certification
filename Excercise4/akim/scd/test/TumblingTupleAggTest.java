@@ -107,7 +107,7 @@ public class TumblingTupleAggTest {
 		for (int i = 0; i < 1000; i++){
 			String symbol = (String)testingSymbols[random.nextInt(testingSymbols.length)];
 			qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tupleGenerator.nextQuote(symbol, 0, 0, SECOND));
-			if (tupleGenerator.getCountSimboleFired(symbol) % WINDOW_SIZE == 0){
+			if (tupleGenerator.getCountSimbolFired(symbol) % WINDOW_SIZE == 0){
 				statsExpecter.expect(ObjectArrayTupleMaker.MAKER, buildGenericResultTupleObject(symbol));
 			} else {
 				statsExpecter.expectNothing();
