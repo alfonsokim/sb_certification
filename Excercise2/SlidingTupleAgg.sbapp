@@ -25,9 +25,9 @@
                     <include field="MaxPrice">max(Price)</include>
                     <include field="MinPrice">min(Price)</include>
                     <include field="StdPrice">stdev(Price)</include>
-                    <include field="lastPrice">lastval(Price)</include>
+                    <include field="LastPrice">lastval(Price)</include>
                     <include field="LastQuantity">lastval(Quantity)</include>
-                    <include field="lastTime">lastval(Time)</include>
+                    <include field="LastTime">lastval(Time)</include>
                 </expressions>
             </target-list>
             <param name="group-by-name.0" value="Symbol"/>

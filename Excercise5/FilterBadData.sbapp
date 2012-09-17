@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="7.2.6">
+    <add generator="gui">
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
+        <parameter-definitions>
+            <parameter default="1.96" name="NumStandardDeviations"/>
+            <parameter default="5" name="NumSeconds"/>
+            <parameter default="1000" name="NumShares"/>
+        </parameter-definitions>
+        <stream name="InputData" schema="QuoteSchema">
+        </stream>
+        <box name="FilterValidQuotes" type="filter">
+            <input port="1" stream="InputData"/>
+            <output port="1" stream="out:FilterValidQuotes_1"/>
+            <output port="2" stream="out:FilterValidQuotes_2"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(not isnull(Symbol)) and Price &gt; 0 and Quantity &gt; 0 and (not isnull(Time))"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <box name="FilterTimeQttyQuotes" type="filter">
+            <input port="1" stream="out:FilterValidQuotes_1"/>
+            <output port="1" stream="out:FilterTimeQttyQuotes_1"/>
+            <output port="2" stream="out:FilterTimeQttyQuotes_2"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(now() - Time &lt; seconds(${NumSeconds})) and (Quantity &lt;= ${NumShares})"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <module-reference name="SlidingTupleAgg">
+            <param name="file" value="SlidingTupleAgg.sbapp"/>
+            <input name="InQuote" port="1" stream="out:FilterTimeQttyQuotes_1"/>
+            <output name="OutStats" port="1" stream="out:SlidingTupleAgg_1"/>
+        </module-reference>
+        <box name="FilterMeanPrice" type="filter">
+            <input port="1" stream="out:SlidingTupleAgg_1"/>
+            <output port="1" stream="out:FilterMeanPrice_1"/>
+            <output port="2" stream="out:FilterMeanPrice_2"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="abs(LastPrice - AvgPrice) &lt;= (StdPrice * ${NumStandardDeviations})"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <box name="MapBadQuotes" type="map">
+            <input port="1" stream="out:FilterMeanPrice_2"/>
+            <output port="1" stream="out:MapBadQuotes_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="Symbol">Symbol</include>
+                    <include field="Price">LastPrice</include>
+                    <include field="Quantity">LastQuantity</include>
+                    <include field="Time">LastTime</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="MapGoodQuotes" type="map">
+            <input port="1" stream="out:FilterMeanPrice_1"/>
+            <output port="1" stream="GoodQuotesOutput"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="Symbol">Symbol</include>
+                    <include field="Price">LastPrice</include>
+                    <include field="Quantity">LastQuantity</include>
+                    <include field="Time">LastTime</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="GoodQuotesOutput">
+        </output-stream>
+        <box name="Union" type="union">
+            <input port="1" stream="out:MapBadQuotes_1"/>
+            <input port="2" stream="out:FilterTimeQttyQuotes_2"/>
+            <input port="3" stream="out:FilterValidQuotes_2"/>
+            <output port="1" stream="BadQuotesOutput"/>
+            <param name="strict" value="false"/>
+            <param name="strict" value="true"/>
+            <param name="schema" value="QuoteSchema"/>
+        </box>
+        <output-stream name="BadQuotesOutput">
+        </output-stream>
+    </add>
+</modify>
