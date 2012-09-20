@@ -16,7 +16,7 @@
             <input port="1" stream="InputData"/>
             <output port="1" stream="out:FilterValidQuotes_1"/>
             <output port="2" stream="out:FilterValidQuotes_2"/>
-            <param name="autogen-nomatch-port" value="false"/>
+            <param name="autogen-nomatch-port" value="true"/>
             <param name="expression.0" value="(not isnull(Symbol)) and Price &gt; 0 and Quantity &gt; 0 and (not isnull(Time))"/>
             <param name="expression.1" value="true"/>
         </box>
@@ -24,7 +24,7 @@
             <input port="1" stream="out:FilterValidQuotes_1"/>
             <output port="1" stream="out:FilterTimeQttyQuotes_1"/>
             <output port="2" stream="out:FilterTimeQttyQuotes_2"/>
-            <param name="autogen-nomatch-port" value="false"/>
+            <param name="autogen-nomatch-port" value="true"/>
             <param name="expression.0" value="(now() - Time &lt; seconds(${NumSeconds})) and (Quantity &lt;= ${NumShares})"/>
             <param name="expression.1" value="true"/>
         </box>
@@ -37,7 +37,7 @@
             <input port="1" stream="out:SlidingTupleAgg_1"/>
             <output port="1" stream="out:FilterMeanPrice_1"/>
             <output port="2" stream="out:FilterMeanPrice_2"/>
-            <param name="autogen-nomatch-port" value="false"/>
+            <param name="autogen-nomatch-port" value="true"/>
             <param name="expression.0" value="abs(LastPrice - AvgPrice) &lt;= (StdPrice * ${NumStandardDeviations})"/>
             <param name="expression.1" value="true"/>
         </box>
@@ -74,7 +74,8 @@
             <input port="2" stream="out:FilterTimeQttyQuotes_2"/>
             <input port="3" stream="out:FilterValidQuotes_2"/>
             <output port="1" stream="BadQuotesOutput"/>
-            <param name="strict" value="false"/>
+            <param name="strict" value="true"/>
+            <param name="schema" value="QuoteSchema"/>
             <param name="strict" value="true"/>
             <param name="schema" value="QuoteSchema"/>
         </box>
