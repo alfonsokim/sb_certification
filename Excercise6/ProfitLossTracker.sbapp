@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="7.2.6">
+    <add generator="gui">
+        <implements module-reference="PositionKeeperInterface.sbint"/>
+        <import from="PositionKeeperInterface.sbint" postfix="" prefix=""/>
+        <import alias="ExecutionRequestSchema" from="SharedSchemas.sbapp" item="ExecutionRequestSchema"/>
+        <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
+        <data name="PositionTable" type="querytable">
+            <param name="primary-index-type" value="btree"/>
+            <param name="key.0" value="TraderName"/>
+            <param name="index-type.0" value="btree"/>
+            <param name="index.0" value="Wealth"/>
+            <param name="storage-method" value="memory"/>
+            <param name="schema" value="PositionSchema"/>
+            <param name="replicated" value="false"/>
+            <param name="shared-table" value="none"/>
+            <param name="table-schema" value="PositionTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="ExecutionRequestInput" schema="ExecutionRequestSchema">
+        </stream>
+        <stream name="IndividualTraderInput" schema="IndividualTraderSchema">
+        </stream>
+        <output-stream name="PositionOuput" schema="PositionSchema">
+        </output-stream>
+        <box name="FilterWealth" type="filter">
+            <input port="1" stream="IndividualTraderInput"/>
+            <output port="1" stream="out:FilterWealth_1"/>
+            <output port="2" stream="out:FilterWealth_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="Wealth &gt; 0"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <box name="QueryDelete" type="query">
+            <dataref id="querytable" name="PositionTable"/>
+            <input port="1" stream="out:FilterWealth_2"/>
+            <output port="1" stream="out:QueryDelete_1"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="TraderName"/>
+            <param name="key-lowerbound-value.0" value="TraderName"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <expressions>
+                    <include field="TraderName">input1.TraderName</include>
+                    <include field="Wealth">old.Wealth</include>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="PositionSchema" name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="PositionSchema" name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="PositionSchema" name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="QueryUpdate" type="query">
+            <dataref id="querytable" name="PositionTable"/>
+            <input port="1" stream="out:FilterWealth_1"/>
+            <output port="1" stream="out:QueryUpdate_1"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="TraderName"/>
+            <param name="key-value.0" value="TraderName"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="TraderName">input1.TraderName</include>
+                    <include field="Wealth">old.Wealth</include>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="PositionSchema" name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="Wealth">Wealth + input1.Wealth</set>
+                    <set field="Time">now()</set>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="PositionSchema" name="update">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="Symbol">string(null)</set>
+                    <set field="Price">double(0)</set>
+                    <set field="Quantity">int(0)</set>
+                    <set field="Position">string(null)</set>
+                    <set field="Wealth">Wealth</set>
+                    <set field="Time">now()</set>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="PositionSchema" name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="out:QueryUpdate_1"/>
+            <input port="2" stream="out:QueryDelete_1"/>
+            <output port="1" stream="IndividualTraderOutput"/>
+            <param name="strict" value="false"/>
+            <param name="strict" value="true"/>
+            <param name="schema" value="IndividualTraderSchema"/>
+        </box>
+        <output-stream name="IndividualTraderOutput" schema="IndividualTraderSchema">
+        </output-stream>
+    </add>
+</modify>

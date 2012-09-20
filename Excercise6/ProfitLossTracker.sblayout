@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application-layout>
+    <component name="PositionTable">
+        <param name="gui:x" value="34.0"/>
+        <param name="gui:y" value="121.0"/>
+        <param name="gui:width" value="150.0"/>
+        <param name="gui:height" value="63.0"/>
+    </component>
+    <component name="ExecutionRequestInput">
+        <param name="gui:x" value="-129.0"/>
+        <param name="gui:y" value="-169.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="IndividualTraderInput">
+        <param name="gui:x" value="-221.0"/>
+        <param name="gui:y" value="121.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="PositionOuput">
+        <param name="gui:x" value="327.0"/>
+        <param name="gui:y" value="-169.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="FilterWealth">
+        <param name="gui:x" value="-92.0"/>
+        <param name="gui:y" value="121.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="114,568"/>
+    </component>
+    <component name="QueryDelete">
+        <param name="gui:x" value="82.0"/>
+        <param name="gui:y" value="212.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="121,80,481;87,46,101,174,101,173;128,86"/>
+    </component>
+    <component name="QueryUpdate">
+        <param name="gui:x" value="78.0"/>
+        <param name="gui:y" value="10.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="212,140,842;152,81,177,305,177,302;128,86"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="259.0"/>
+        <param name="gui:y" value="122.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="IndividualTraderOutput">
+        <param name="gui:x" value="415.0"/>
+        <param name="gui:y" value="121.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+</application-layout>
