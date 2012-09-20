@@ -4,7 +4,6 @@
         <implements module-reference="PositionKeeperInterface.sbint"/>
         <import from="PositionKeeperInterface.sbint" postfix="" prefix=""/>
         <import alias="ExecutionRequestSchema" from="SharedSchemas.sbapp" item="ExecutionRequestSchema"/>
-        <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
         <data name="PositionTable" type="querytable">
             <param name="primary-index-type" value="btree"/>
             <param name="key.0" value="TraderName"/>
@@ -22,8 +21,14 @@
         </stream>
         <stream name="IndividualTraderInput" schema="IndividualTraderSchema">
         </stream>
-        <output-stream name="PositionOuput" schema="PositionSchema">
-        </output-stream>
+        <box name="FilterPosition" type="filter">
+            <input port="1" stream="ExecutionRequestInput"/>
+            <output port="1" stream="out:FilterPosition_1"/>
+            <output port="2" stream="out:FilterPosition_2"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="Position == &quot;Long&quot; or Position == &quot;Short&quot;"/>
+            <param name="expression.1" value="bool(throw(&quot;Position must be Long or Short&quot;))"/>
+        </box>
         <box name="FilterWealth" type="filter">
             <input port="1" stream="IndividualTraderInput"/>
             <output port="1" stream="out:FilterWealth_1"/>
@@ -31,6 +36,16 @@
             <param name="autogen-nomatch-port" value="true"/>
             <param name="expression.0" value="Wealth &gt; 0"/>
             <param name="expression.1" value="true"/>
+        </box>
+        <box name="MapValue" type="map">
+            <input port="1" stream="out:FilterPosition_1"/>
+            <output port="1" stream="out:MapValue_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="updateValue">if (Position == "Long") then (-1) else (1)</include>
+                </expressions>
+            </target-list>
         </box>
         <box name="QueryDelete" type="query">
             <dataref id="querytable" name="PositionTable"/>
@@ -48,6 +63,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
                 <expressions>
                     <include field="TraderName">input1.TraderName</include>
                     <include field="Wealth">old.Wealth</include>
@@ -79,12 +95,13 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
                 <expressions>
                     <include field="TraderName">input1.TraderName</include>
                     <include field="Wealth">old.Wealth</include>
                 </expressions>
             </target-list>
-            <target-list goal-schema="PositionSchema" name="insert">
+            <target-list goal-schema="PositionSchema_logical_value" name="insert">
                 <item name="input" selection="none"/>
                 <expressions>
                     <set field="Wealth">Wealth + input1.Wealth</set>
@@ -106,15 +123,61 @@
                 <item name="input" selection="all"/>
             </target-list>
         </box>
+        <box name="QueryUpdateWealth" type="query">
+            <dataref id="querytable" name="PositionTable"/>
+            <input port="1" stream="out:MapValue_1"/>
+            <output port="1" stream="out:QueryUpdateWealth_1"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="TraderName"/>
+            <param name="key-value.0" value="TraderName"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="output-no-match"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="all"/>
+            </target-list>
+            <target-list goal-schema="PositionSchema" name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="PositionSchema" name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="Symbol">input1.Symbol</set>
+                    <set field="Price">input1.Price</set>
+                    <set field="Quantity">input1.Quantity</set>
+                    <set field="Position">input1.Position</set>
+                    <set field="Time">input1.Time</set>
+                    <set field="Wealth">Wealth + (updateValue*input1.Price*input1.Quantity)</set>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="PositionSchema" name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
         <box name="Union" type="union">
             <input port="1" stream="out:QueryUpdate_1"/>
             <input port="2" stream="out:QueryDelete_1"/>
             <output port="1" stream="IndividualTraderOutput"/>
-            <param name="strict" value="false"/>
+            <param name="strict" value="true"/>
+            <param name="schema" value="IndividualTraderSchema"/>
             <param name="strict" value="true"/>
             <param name="schema" value="IndividualTraderSchema"/>
         </box>
+        <box name="FilterUpdated" type="filter">
+            <input port="1" stream="out:QueryUpdateWealth_1"/>
+            <output port="1" stream="PositionOuput"/>
+            <output port="2" stream="out:FilterUpdated_2"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="not isnull(Symbol)"/>
+            <param name="expression.1" value="bool(throw(&quot;TraderName not found in table&quot;))"/>
+        </box>
         <output-stream name="IndividualTraderOutput" schema="IndividualTraderSchema">
+        </output-stream>
+        <output-stream name="PositionOuput" schema="PositionSchema">
         </output-stream>
     </add>
 </modify>
