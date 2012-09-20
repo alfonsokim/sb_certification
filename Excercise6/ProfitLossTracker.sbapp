@@ -4,6 +4,7 @@
         <implements module-reference="PositionKeeperInterface.sbint"/>
         <import from="PositionKeeperInterface.sbint" postfix="" prefix=""/>
         <import alias="ExecutionRequestSchema" from="SharedSchemas.sbapp" item="ExecutionRequestSchema"/>
+        <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
         <data name="PositionTable" type="querytable">
             <param name="primary-index-type" value="btree"/>
             <param name="key.0" value="TraderName"/>
@@ -21,6 +22,11 @@
         </stream>
         <stream name="IndividualTraderInput" schema="IndividualTraderSchema">
         </stream>
+        <box name="MetronomeMonitor" type="metronome">
+            <output port="1" stream="out:MetronomeMonitor_1"/>
+            <param name="interval" value="5"/>
+            <param name="timestamp-field" value="time"/>
+        </box>
         <box name="FilterPosition" type="filter">
             <input port="1" stream="ExecutionRequestInput"/>
             <output port="1" stream="out:FilterPosition_1"/>
@@ -36,6 +42,45 @@
             <param name="autogen-nomatch-port" value="true"/>
             <param name="expression.0" value="Wealth &gt; 0"/>
             <param name="expression.1" value="true"/>
+        </box>
+        <box name="QueryMonitor" type="query">
+            <dataref id="querytable" name="PositionTable"/>
+            <input port="1" stream="out:MetronomeMonitor_1"/>
+            <output port="1" stream="out:QueryMonitor_1"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="secondary-key"/>
+            <param name="key-field.0" value="Wealth"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-value.0" value="0"/>
+            <param name="key-upperbound-operation.0" value="lt"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="all"/>
+            </target-list>
+            <target-list goal-schema="PositionSchema" name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="PositionSchema" name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="PositionSchema" name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="MapOutSchema" type="map">
+            <input port="1" stream="out:QueryMonitor_1"/>
+            <output port="1" stream="out:MapOutSchema_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="TraderName">TraderName</include>
+                    <include field="Wealth">Wealth</include>
+                </expressions>
+            </target-list>
         </box>
         <box name="MapValue" type="map">
             <input port="1" stream="out:FilterPosition_1"/>
@@ -159,11 +204,11 @@
             </target-list>
         </box>
         <box name="Union" type="union">
-            <input port="1" stream="out:QueryUpdate_1"/>
-            <input port="2" stream="out:QueryDelete_1"/>
+            <input port="1" stream="out:MapOutSchema_1"/>
+            <input port="2" stream="out:QueryUpdate_1"/>
+            <input port="3" stream="out:QueryDelete_1"/>
             <output port="1" stream="IndividualTraderOutput"/>
-            <param name="strict" value="true"/>
-            <param name="schema" value="IndividualTraderSchema"/>
+            <param name="strict" value="false"/>
             <param name="strict" value="true"/>
             <param name="schema" value="IndividualTraderSchema"/>
         </box>
