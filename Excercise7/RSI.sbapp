@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="7.2.6">
+    <add generator="gui">
+        <implements module-reference="AlgoInterface.sbint"/>
+        <import from="AlgoInterface.sbint" postfix="" prefix=""/>
+        <import alias="ExecutionRequestSchema" from="SharedSchemas.sbapp" item="ExecutionRequestSchema"/>
+        <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
+        <constant expr="75" name="NumberShares"/>
+        <constant expr="&quot;RSI&quot;" name="TraderName"/>
+        <parameter-definitions>
+            <parameter default="5" name="TUMBLING_WINDOW_SIZE"/>
+            <parameter default="10" name="SLIDING_WINDOW_SIZE"/>
+            <parameter default="0.0714" name="SMOOTHING_FACTOR"/>
+        </parameter-definitions>
+        <stream name="QuoteInput" schema="QuoteSchema">
+        </stream>
+        <box name="TumblingWindow" type="aggregate">
+            <input port="1" stream="QuoteInput"/>
+            <output port="1" stream="out:TumblingWindow_1"/>
+            <param name="dimension-name.0" value="TupleDimension"/>
+            <param name="dimension-type.0" value="tuple"/>
+            <param name="dimension-advance.0" value="${TUMBLING_WINDOW_SIZE}"/>
+            <param name="dimension-partial.0" value="no"/>
+            <param name="dimension-size.0" value="${TUMBLING_WINDOW_SIZE}"/>
+            <param name="output-group-by" value="true"/>
+            <target-list>
+                <expressions>
+                    <include field="LastPrice">lastval(Price)</include>
+                    <include field="FirstPrice">firstval(Price)</include>
+                    <include field="LastTime">lastval(Time)</include>
+                </expressions>
+            </target-list>
+            <param name="group-by-name.0" value="Symbol"/>
+            <param name="group-by.0" value="Symbol"/>
+        </box>
+        <box name="MapDifference" type="map">
+            <input port="1" stream="out:TumblingWindow_1"/>
+            <output port="1" stream="out:MapDifference_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="Difference">LastPrice - FirstPrice</include>
+                    <include field="Time">LastTime</include>
+                    <include field="TradePrice">LastPrice</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="MapChanges" type="map">
+            <input port="1" stream="out:MapDifference_1"/>
+            <output port="1" stream="out:MapChanges_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="U">if Difference &gt; 0 then Difference else 0</include>
+                    <include field="D">if Difference &lt; 0 then -Difference else 0</include>
+                    <remove field="Difference"/>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="SlidingWindow" type="aggregate">
+            <input port="1" stream="out:MapChanges_1"/>
+            <output port="1" stream="out:SlidingWindow_1"/>
+            <param name="dimension-name.0" value="TupleDimension"/>
+            <param name="dimension-type.0" value="tuple"/>
+            <param name="dimension-advance.0" value="1"/>
+            <param name="dimension-partial.0" value="no"/>
+            <param name="dimension-size.0" value="${SLIDING_WINDOW_SIZE}"/>
+            <param name="output-group-by" value="true"/>
+            <target-list>
+                <expressions>
+                    <include field="EMA_U">exp_moving_avg(U, 1, ${SMOOTHING_FACTOR})</include>
+                    <include field="EMA_D">exp_moving_avg(D, 1, ${SMOOTHING_FACTOR})</include>
+                    <include field="LastTime">lastval(Time)</include>
+                    <include field="TradePrice">lastval(TradePrice)</include>
+                </expressions>
+            </target-list>
+            <param name="group-by-name.0" value="Symbol"/>
+            <param name="group-by.0" value="Symbol"/>
+        </box>
+        <box name="MapRSI" type="map">
+            <input port="1" stream="out:SlidingWindow_1"/>
+            <output port="1" stream="out:MapRSI_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="Symbol">Symbol</include>
+                    <include field="RSI">if EMA_D &gt; 0 then ( 100 - (100 / (1 + (EMA_U / EMA_D))) ) else if EMA_D = 0 then 100 else throw("RSI &lt; 0")</include>
+                    <include field="Time">LastTime</include>
+                    <include field="Price">TradePrice</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="SignalPosition" type="map">
+            <input port="1" stream="out:MapRSI_1"/>
+            <output port="1" stream="out:SignalPosition_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="Symbol">Symbol</include>
+                    <include field="TradePrice">Price</include>
+                    <include field="Time">Time</include>
+                    <include field="Position">if RSI &gt;= 70 then "Short" else if RSI &lt;= 30 then "Long" else "None"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="FilterSignal" type="filter">
+            <input port="1" stream="out:SignalPosition_1"/>
+            <output port="1" stream="out:FilterSignal_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="Position == &quot;Long&quot; or Position == &quot;Short&quot;"/>
+        </box>
+        <box name="FixSchema" type="map">
+            <input port="1" stream="out:FilterSignal_1"/>
+            <output port="1" stream="ExecutionRequestOutput"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="Symbol">input1.Symbol</include>
+                    <include field="Price">input1.TradePrice</include>
+                    <include field="Quantity">NumberShares</include>
+                    <include field="Time">input1.Time</include>
+                    <include field="Position">input1.Position</include>
+                    <include field="TraderName">TraderName</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="ExecutionRequestOutput" schema="ExecutionRequestSchema">
+        </output-stream>
+    </add>
+</modify>

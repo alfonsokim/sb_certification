@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application-layout>
+    <component name="QuoteInput">
+        <param name="gui:x" value="-408.0"/>
+        <param name="gui:y" value="14.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="TumblingWindow">
+        <param name="gui:x" value="-297.0"/>
+        <param name="gui:y" value="14.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="408,274"/>
+    </component>
+    <component name="MapDifference">
+        <param name="gui:x" value="-189.0"/>
+        <param name="gui:y" value="14.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="MapChanges">
+        <param name="gui:x" value="-79.0"/>
+        <param name="gui:y" value="15.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="SlidingWindow">
+        <param name="gui:x" value="30.0"/>
+        <param name="gui:y" value="15.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="128,86"/>
+    </component>
+    <component name="MapRSI">
+        <param name="gui:x" value="140.0"/>
+        <param name="gui:y" value="14.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="SignalPosition">
+        <param name="gui:x" value="251.0"/>
+        <param name="gui:y" value="14.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="FilterSignal">
+        <param name="gui:x" value="364.0"/>
+        <param name="gui:y" value="14.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="114,568"/>
+    </component>
+    <component name="FixSchema">
+        <param name="gui:x" value="488.0"/>
+        <param name="gui:y" value="14.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="ExecutionRequestOutput">
+        <param name="gui:x" value="621.0"/>
+        <param name="gui:y" value="14.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+</application-layout>
