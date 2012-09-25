@@ -7,8 +7,8 @@
         <param name="gui:height" value="63.0"/>
     </component>
     <component name="ExecutionRequestInput">
-        <param name="gui:x" value="-215.0"/>
-        <param name="gui:y" value="-192.0"/>
+        <param name="gui:x" value="-170.0"/>
+        <param name="gui:y" value="-121.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
     </component>
@@ -19,14 +19,14 @@
         <param name="gui:height" value="62.0"/>
     </component>
     <component name="MetronomeMonitor">
-        <param name="gui:x" value="-132.0"/>
-        <param name="gui:y" value="-44.0"/>
+        <param name="gui:x" value="-145.0"/>
+        <param name="gui:y" value="12.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
     </component>
     <component name="FilterPosition">
-        <param name="gui:x" value="-86.0"/>
-        <param name="gui:y" value="-192.0"/>
+        <param name="gui:x" value="-41.0"/>
+        <param name="gui:y" value="-121.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
     </component>
@@ -37,21 +37,20 @@
         <param name="gui:height" value="62.0"/>
     </component>
     <component name="QueryMonitor">
-        <param name="gui:x" value="-13.0"/>
-        <param name="gui:y" value="-44.0"/>
+        <param name="gui:x" value="-26.0"/>
+        <param name="gui:y" value="12.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="210,139,845;152,81,178,305,178,300;128,86"/>
     </component>
     <component name="MapOutSchema">
-        <param name="gui:x" value="103.0"/>
-        <param name="gui:y" value="-44.0"/>
+        <param name="gui:x" value="90.0"/>
+        <param name="gui:y" value="12.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
     </component>
     <component name="MapValue">
-        <param name="gui:x" value="44.0"/>
-        <param name="gui:y" value="-200.0"/>
+        <param name="gui:x" value="89.0"/>
+        <param name="gui:y" value="-129.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
     </component>
@@ -68,11 +67,10 @@
         <param name="gui:height" value="62.0"/>
     </component>
     <component name="QueryUpdateWealth">
-        <param name="gui:x" value="177.0"/>
-        <param name="gui:y" value="-200.0"/>
+        <param name="gui:x" value="222.0"/>
+        <param name="gui:y" value="-129.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="210,139,845;152,81,178,305,178,300;128,86"/>
     </component>
     <component name="Union">
         <param name="gui:x" value="283.0"/>
@@ -81,11 +79,10 @@
         <param name="gui:height" value="62.0"/>
     </component>
     <component name="FilterUpdated">
-        <param name="gui:x" value="307.0"/>
-        <param name="gui:y" value="-199.0"/>
+        <param name="gui:x" value="352.0"/>
+        <param name="gui:y" value="-128.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="146,728"/>
     </component>
     <component name="IndividualTraderOutput">
         <param name="gui:x" value="421.0"/>
@@ -94,8 +91,8 @@
         <param name="gui:height" value="62.0"/>
     </component>
     <component name="PositionOuput">
-        <param name="gui:x" value="463.0"/>
-        <param name="gui:y" value="-207.0"/>
+        <param name="gui:x" value="508.0"/>
+        <param name="gui:y" value="-136.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
     </component>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="7.2.6">
+    <add generator="gui">
+        <implements module-reference="PositionKeeperInterface.sbint"/>
+        <implements module-reference="AlgoInterface.sbint"/>
+        <import from="AlgoInterface.sbint" postfix="" prefix=""/>
+        <import from="PositionKeeperInterface.sbint" postfix="" prefix=""/>
+        <import alias="ExecutionRequestSchema" from="SharedSchemas.sbapp" item="ExecutionRequestSchema"/>
+        <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
+        <stream name="ExecutionRequestInput" schema="ExecutionRequestSchema">
+        </stream>
+        <output-stream name="ExecutionRequestOutput" schema="ExecutionRequestSchema">
+        </output-stream>
+        <stream name="IndividualTraderInput" schema="IndividualTraderSchema">
+        </stream>
+        <output-stream name="IndividualTraderOutput" schema="IndividualTraderSchema">
+        </output-stream>
+        <output-stream name="PositionOuput" schema="PositionSchema">
+        </output-stream>
+        <stream name="QuoteInput" schema="QuoteSchema">
+        </stream>
+        <module-reference name="FilterBadData">
+            <param name="file" value="FilterBadData.sbapp"/>
+            <input name="InputData" port="1" stream="ExecutionRequestInput"/>
+            <output name="BadQuotesOutput" port="1" stream="out:FilterBadData_1"/>
+            <output name="GoodQuotesOutput" port="2" stream="out:FilterBadData_2"/>
+        </module-reference>
+        <extension-point name="AlgoInterface">
+            <param name="file" value="AlgoInterface.sbint"/>
+            <input dispatch="broadcast" name="QuoteInput" port="1" stream="out:FilterBadData_1"/>
+            <output name="ExecutionRequestOutput" port="1" stream="out:AlgoInterface_1"/>
+            <multiplicity type="interface">
+                <instance file="RSI.sbapp" name="RSI"/>
+                <instance file="Williams.sbapp" name="Williams"/>
+            </multiplicity>
+        </extension-point>
+    </add>
+</modify>

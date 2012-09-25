@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application-layout>
+    <component name="ExecutionRequestInput">
+        <param name="gui:x" value="-363.0"/>
+        <param name="gui:y" value="14.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="ExecutionRequestOutput">
+        <param name="gui:x" value="360.0"/>
+        <param name="gui:y" value="300.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="IndividualTraderInput">
+        <param name="gui:x" value="-363.0"/>
+        <param name="gui:y" value="147.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="IndividualTraderOutput">
+        <param name="gui:x" value="360.0"/>
+        <param name="gui:y" value="23.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="PositionOuput">
+        <param name="gui:x" value="360.0"/>
+        <param name="gui:y" value="156.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="QuoteInput">
+        <param name="gui:x" value="-363.0"/>
+        <param name="gui:y" value="291.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="FilterBadData">
+        <param name="gui:x" value="-216.0"/>
+        <param name="gui:y" value="15.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="AlgoInterface">
+        <param name="gui:x" value="-46.0"/>
+        <param name="gui:y" value="3.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="671,671,670;152,1060;506,506"/>
+    </component>
+</application-layout>
