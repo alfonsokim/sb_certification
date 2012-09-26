@@ -13,7 +13,7 @@
             <param name="storage-method" value="memory"/>
             <param name="schema" value="PositionSchema"/>
             <param name="replicated" value="false"/>
-            <param name="shared-table" value="none"/>
+            <param name="shared-table" value="input"/>
             <param name="table-schema" value="PositionTableSchema"/>
             <param name="truncate" value="false"/>
             <preload format="csv" mode="empty"/>
@@ -60,6 +60,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="old" selection="all"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list goal-schema="PositionSchema" name="insert">
                 <item name="input" selection="all"/>
@@ -109,6 +110,7 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
                 <expressions>
                     <include field="TraderName">input1.TraderName</include>
                     <include field="Wealth">old.Wealth</include>
@@ -184,6 +186,7 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="all"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list goal-schema="PositionSchema" name="insert">
                 <item name="input" selection="all"/>
@@ -208,7 +211,8 @@
             <input port="2" stream="out:QueryUpdate_1"/>
             <input port="3" stream="out:QueryDelete_1"/>
             <output port="1" stream="IndividualTraderOutput"/>
-            <param name="strict" value="false"/>
+            <param name="strict" value="true"/>
+            <param name="schema" value="IndividualTraderSchema"/>
             <param name="strict" value="true"/>
             <param name="schema" value="IndividualTraderSchema"/>
         </box>

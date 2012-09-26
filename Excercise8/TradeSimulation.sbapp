@@ -1,38 +1,67 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <modify version="7.2.6">
     <add generator="gui">
-        <implements module-reference="PositionKeeperInterface.sbint"/>
         <implements module-reference="AlgoInterface.sbint"/>
         <import from="AlgoInterface.sbint" postfix="" prefix=""/>
-        <import from="PositionKeeperInterface.sbint" postfix="" prefix=""/>
+        <import alias="IndividualTraderSchema" from="PositionKeeperInterface.sbint" item="IndividualTraderSchema"/>
+        <import alias="PositionTableSchema" from="PositionKeeperInterface.sbint" item="PositionTableSchema"/>
         <import alias="ExecutionRequestSchema" from="SharedSchemas.sbapp" item="ExecutionRequestSchema"/>
         <import alias="QuoteSchema" from="SharedSchemas.sbapp" item="QuoteSchema"/>
-        <stream name="ExecutionRequestInput" schema="ExecutionRequestSchema">
+        <data name="QueryTable" type="querytable">
+            <param name="primary-index-type" value="btree"/>
+            <param name="key.0" value="TraderName"/>
+            <param name="index-type.0" value="btree"/>
+            <param name="index.0" value="Wealth"/>
+            <param name="storage-method" value="memory"/>
+            <param name="schema" value="__Position_Keeper_Interface_sbint__Position_Schema_"/>
+            <param name="replicated" value="false"/>
+            <param name="shared-table" value="none"/>
+            <param name="table-schema" value="PositionTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="text"/>
+        </data>
+        <stream name="IndivualTraderInput" schema="IndividualTraderSchema">
         </stream>
-        <output-stream name="ExecutionRequestOutput" schema="ExecutionRequestSchema">
-        </output-stream>
-        <stream name="IndividualTraderInput" schema="IndividualTraderSchema">
-        </stream>
-        <output-stream name="IndividualTraderOutput" schema="IndividualTraderSchema">
-        </output-stream>
-        <output-stream name="PositionOuput" schema="PositionSchema">
-        </output-stream>
         <stream name="QuoteInput" schema="QuoteSchema">
         </stream>
         <module-reference name="FilterBadData">
             <param name="file" value="FilterBadData.sbapp"/>
-            <input name="InputData" port="1" stream="ExecutionRequestInput"/>
+            <input name="InputData" port="1" stream="QuoteInput"/>
             <output name="BadQuotesOutput" port="1" stream="out:FilterBadData_1"/>
             <output name="GoodQuotesOutput" port="2" stream="out:FilterBadData_2"/>
         </module-reference>
-        <extension-point name="AlgoInterface">
+        <extension-point name="Algorithms">
             <param name="file" value="AlgoInterface.sbint"/>
-            <input dispatch="broadcast" name="QuoteInput" port="1" stream="out:FilterBadData_1"/>
-            <output name="ExecutionRequestOutput" port="1" stream="out:AlgoInterface_1"/>
+            <input dispatch="broadcast" name="QuoteInput" port="1" stream="out:FilterBadData_2"/>
+            <output name="ExecutionRequestOutput" port="1" stream="out:Algorithms_1"/>
             <multiplicity type="interface">
                 <instance file="RSI.sbapp" name="RSI"/>
                 <instance file="Williams.sbapp" name="Williams"/>
             </multiplicity>
         </extension-point>
+        <box name="Split" type="split">
+            <input port="1" stream="out:Algorithms_1"/>
+            <output port="1" stream="ExecutionRequestOutput"/>
+            <output port="2" stream="out:Split_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <output-stream name="ExecutionRequestOutput" schema="ExecutionRequestSchema">
+        </output-stream>
+        <module-reference name="ProfitLossTracker">
+            <param name="file" value="ProfitLossTracker.sbapp"/>
+            <input name="ExecutionRequestInput" port="1" stream="out:Split_2"/>
+            <input name="IndividualTraderInput" port="2" stream="IndivualTraderInput"/>
+            <output name="IndividualTraderOutput" port="1" stream="IndividualTraderOutput"/>
+            <output name="PositionOuput" port="2" stream="PositionOutput"/>
+            <input-dataref name="PositionTable" table="QueryTable"/>
+        </module-reference>
+        <output-stream name="IndividualTraderOutput">
+        </output-stream>
+        <output-stream name="PositionOutput">
+        </output-stream>
+        <gui.note name="Note">
+            <property name="description" value="The excersice definition says that &quot;The output from the Extension Point must be sent first to ExecutionRequestOutput and then to the ProfitLossTracker module.&quot;"/>
+            <note-target name="Split"/>
+        </gui.note>
     </add>
 </modify>
