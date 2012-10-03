@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <application-layout>
-    <component name="InputData">
+    <component name="QuoteInput">
         <param name="gui:x" value="-509.0"/>
         <param name="gui:y" value="-105.0"/>
         <param name="gui:width" value="62.0"/>
@@ -11,18 +11,29 @@
         <param name="gui:y" value="-105.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="146,728"/>
     </component>
     <component name="FilterTimeQttyQuotes">
         <param name="gui:x" value="-265.0"/>
         <param name="gui:y" value="-114.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="146,728"/>
+        <param name="gui:columnwidths" value="93,464"/>
+    </component>
+    <component name="invalidQuote">
+        <param name="gui:x" value="-322.0"/>
+        <param name="gui:y" value="-19.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
     </component>
     <component name="SlidingTupleAgg">
         <param name="gui:x" value="-133.0"/>
         <param name="gui:y" value="-127.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="invalidTime">
+        <param name="gui:x" value="-147.0"/>
+        <param name="gui:y" value="-9.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
     </component>
@@ -31,7 +42,6 @@
         <param name="gui:y" value="-127.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="146,728"/>
     </component>
     <component name="MapBadQuotes">
         <param name="gui:x" value="141.0"/>
@@ -54,6 +64,12 @@
     <component name="Union">
         <param name="gui:x" value="266.0"/>
         <param name="gui:y" value="34.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="invalidMean">
+        <param name="gui:x" value="279.0"/>
+        <param name="gui:y" value="-69.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
     </component>

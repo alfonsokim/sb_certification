@@ -10,12 +10,12 @@
             <parameter default="5" name="NumSeconds"/>
             <parameter default="1000" name="NumShares"/>
         </parameter-definitions>
-        <stream name="InputData" schema="QuoteSchema">
+        <stream name="QuoteInput" schema="QuoteSchema">
         </stream>
         <box name="FilterValidQuotes" type="filter">
-            <input port="1" stream="InputData"/>
+            <input port="1" stream="QuoteInput"/>
             <output port="1" stream="out:FilterValidQuotes_1"/>
-            <output port="2" stream="out:FilterValidQuotes_2"/>
+            <output port="2" stream="invalidQuote"/>
             <param name="autogen-nomatch-port" value="true"/>
             <param name="expression.0" value="(not isnull(Symbol)) and Price &gt; 0 and Quantity &gt; 0 and (not isnull(Time))"/>
             <param name="expression.1" value="true"/>
@@ -23,16 +23,20 @@
         <box name="FilterTimeQttyQuotes" type="filter">
             <input port="1" stream="out:FilterValidQuotes_1"/>
             <output port="1" stream="out:FilterTimeQttyQuotes_1"/>
-            <output port="2" stream="out:FilterTimeQttyQuotes_2"/>
+            <output port="2" stream="invalidTime"/>
             <param name="autogen-nomatch-port" value="true"/>
-            <param name="expression.0" value="(now() - Time &lt; seconds(${NumSeconds})) and (Quantity &lt;= ${NumShares})"/>
+            <param name="expression.0" value="((now() - Time) &lt; seconds(${NumSeconds})) and (Quantity &lt;= ${NumShares})"/>
             <param name="expression.1" value="true"/>
         </box>
+        <output-stream name="invalidQuote">
+        </output-stream>
         <module-reference name="SlidingTupleAgg">
             <param name="file" value="SlidingTupleAgg.sbapp"/>
             <input name="InQuote" port="1" stream="out:FilterTimeQttyQuotes_1"/>
             <output name="OutStats" port="1" stream="out:SlidingTupleAgg_1"/>
         </module-reference>
+        <output-stream name="invalidTime">
+        </output-stream>
         <box name="FilterMeanPrice" type="filter">
             <input port="1" stream="out:SlidingTupleAgg_1"/>
             <output port="1" stream="out:FilterMeanPrice_1"/>
@@ -43,7 +47,7 @@
         </box>
         <box name="MapBadQuotes" type="map">
             <input port="1" stream="out:FilterMeanPrice_2"/>
-            <output port="1" stream="out:MapBadQuotes_1"/>
+            <output port="1" stream="invalidMean"/>
             <target-list>
                 <item name="input" selection="none"/>
                 <expressions>
@@ -70,15 +74,17 @@
         <output-stream name="GoodQuotesOutput">
         </output-stream>
         <box name="Union" type="union">
-            <input port="1" stream="out:MapBadQuotes_1"/>
-            <input port="2" stream="out:FilterTimeQttyQuotes_2"/>
-            <input port="3" stream="out:FilterValidQuotes_2"/>
+            <input port="1" stream="invalidMean"/>
+            <input port="2" stream="invalidTime"/>
+            <input port="3" stream="invalidQuote"/>
             <output port="1" stream="BadQuotesOutput"/>
             <param name="strict" value="true"/>
             <param name="schema" value="QuoteSchema"/>
             <param name="strict" value="true"/>
             <param name="schema" value="QuoteSchema"/>
         </box>
+        <output-stream name="invalidMean">
+        </output-stream>
         <output-stream name="BadQuotesOutput">
         </output-stream>
     </add>

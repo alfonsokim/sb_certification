@@ -27,7 +27,7 @@ RSI,,0,0,,1000000,0</preload>
         </stream>
         <module-reference name="FilterBadData">
             <param name="file" value="FilterBadData.sbapp"/>
-            <input name="InputData" port="1" stream="QuoteInput"/>
+            <input name="QuoteInput" port="1" stream="QuoteInput"/>
             <output name="BadQuotesOutput" port="1" stream="out:FilterBadData_1"/>
             <output name="GoodQuotesOutput" port="2" stream="out:FilterBadData_2"/>
         </module-reference>
