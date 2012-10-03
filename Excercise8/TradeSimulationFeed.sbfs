@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbfs:Simulation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:sbfs="http://www.streambase.com/schemas/feedsim/02/SBFS">
+  <SimStreams Name="QuoteInput">
+    <ProcessingOptions TimeStampColumn="4" DataGenerationMethod="DataFile" DataGenRateMethod="TimestampFromColumn">
+      <DataSource Name="DataSource" DataSourceURI="test_data.csv" QuoteChar="34"/>
+    </ProcessingOptions>
+    <Schema>
+      <Fields Name="Symbol" DataTypeName="string" Description="">
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="Price" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldNum="2"/>
+      </Fields>
+      <Fields Name="Quantity" DataTypeName="int" Description="">
+        <DataSourceMapping DestFieldNum="3"/>
+      </Fields>
+      <Fields Name="Time" DataTypeName="timestamp" Description="Time increases monotinocally in tuples received from the Caymann Exchange">
+        <DataSourceMapping DestFieldNum="4" DestFieldName=""/>
+      </Fields>
+    </Schema>
+  </SimStreams>
+</sbfs:Simulation>

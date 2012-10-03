@@ -29,7 +29,6 @@
         <param name="gui:y" value="-49.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="671,671,670;152,1060;506,506"/>
     </component>
     <component name="Split">
         <param name="gui:x" value="-69.0"/>
@@ -48,7 +47,6 @@
         <param name="gui:y" value="37.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="671,671,670;85,595;340,340;128,86"/>
     </component>
     <component name="IndividualTraderOutput">
         <param name="gui:x" value="228.0"/>
@@ -63,9 +61,9 @@
         <param name="gui:height" value="62.0"/>
     </component>
     <component name="Note">
-        <param name="gui:x" value="-141.0"/>
+        <param name="gui:x" value="-165.0"/>
         <param name="gui:y" value="-196.0"/>
-        <param name="gui:width" value="208.0"/>
-        <param name="gui:height" value="87.0"/>
+        <param name="gui:width" value="247.0"/>
+        <param name="gui:height" value="99.0"/>
     </component>
 </application-layout>

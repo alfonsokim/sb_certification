@@ -18,7 +18,8 @@
             <param name="shared-table" value="none"/>
             <param name="table-schema" value="PositionTableSchema"/>
             <param name="truncate" value="false"/>
-            <preload format="csv" mode="text"/>
+            <preload format="csv" mode="text">Williams,,0,0,,1000000,0
+RSI,,0,0,,1000000,0</preload>
         </data>
         <stream name="IndivualTraderInput" schema="IndividualTraderSchema">
         </stream>
