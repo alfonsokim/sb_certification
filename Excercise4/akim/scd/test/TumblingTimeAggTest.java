@@ -1,4 +1,5 @@
 package akim.scd.test;
+
 import java.util.Random;
 
 import org.junit.After;
@@ -7,7 +8,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.streambase.sb.unittest.CSVTupleMaker;
 import com.streambase.sb.unittest.Enqueuer;
 import com.streambase.sb.unittest.Expecter;
 import com.streambase.sb.unittest.ObjectArrayTupleMaker;
@@ -20,10 +20,10 @@ public class TumblingTimeAggTest {
 	private static SBServerManager server;
 	private static Enqueuer qouteEnqueuer;
 	private static Expecter statsExpecter;
-	private static TestQuoteTupleCSVGenerator tupleGenerator;
+	private static TestQuoteTupleMaker maker;
 	
 	private final static int WINDOW_SIZE = 10;
-	private final static int SECOND = 1000;
+	private final static int SECOND = 1;
 
 	@BeforeClass
 	public static void setupServer() throws Exception {
@@ -45,52 +45,21 @@ public class TumblingTimeAggTest {
 		server.startContainers();
 		qouteEnqueuer = server.getEnqueuer("InQuote");
 		statsExpecter = new Expecter(server.getDequeuer("OutStats"));
-		tupleGenerator = new TestQuoteTupleCSVGenerator("AAA", "BBB", "CCC", "DDD", "EEE");
+		maker = new TestQuoteTupleMaker("AAA", "BBB", "CCC", "DDD", "EEE");
 	}
 
 	@Test
 	public void testSingleSymbol() throws Exception {
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,1,10,2012-08-01 10:00:01.000-0500");
+		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
 		statsExpecter.expectNothing();
-		
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,2,20,2012-08-01 10:00:02.000-0500");
+		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, 2*SECOND));
 		statsExpecter.expectNothing();
-		
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,3,30,2012-08-01 10:00:03.000-0500");
+		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, 3*SECOND));
 		statsExpecter.expectNothing();
+		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, 4*SECOND));
 		
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,4,40,2012-08-01 10:00:04.000-0500");
-		statsExpecter.expectNothing();
-		
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,5,50,2012-08-01 10:00:05.000-0500");
-		statsExpecter.expectNothing();
-		
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,6,60,2012-08-01 10:00:06.000-0500");
-		statsExpecter.expectNothing();
-		
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,7,70,2012-08-01 10:00:07.000-0500");
-		statsExpecter.expectNothing();
-		
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,8,80,2012-08-01 10:00:08.000-0500");
-		statsExpecter.expectNothing();
-		
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,9,90,2012-08-01 10:00:09.000-0500");
-		statsExpecter.expectNothing();
-		
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,10,20,2012-08-01 10:00:10.000-0500");
-		statsExpecter.expectNothing();
-		
-		qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, "AAA,11,21,2012-08-01 10:00:11.000-0500");
-		statsExpecter.expect(ObjectArrayTupleMaker.MAKER, new Object[] { 
-				"AAA",		// Symbol 
-				"6",		// AvgPrice
-				"11",		// MaxPrice
-				"1",		// MinPrice
-				"3.3166247903554",		// StdPrice
-				"11",		// LastPrice
-				"21",		// LastQunatity
-				"2012-08-01 10:00:11.000-0500",		// LastTime
-				} );
+		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
+		statsExpecter.expect(ObjectArrayTupleMaker.MAKER, maker.buildGenericResultTupleObject("AAA"));
 		
 	}
 	
@@ -99,13 +68,13 @@ public class TumblingTimeAggTest {
 	 */
 	@Test
 	public void testSequentialSingleSymbol() throws Exception {
-		for (String symbol: tupleGenerator.getSymbols()){
+		for (String symbol: maker.getRegisteredSymbols()){
 			for (int i = 0; i < WINDOW_SIZE; i++){
-				qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tupleGenerator.nextQuote(symbol, 0, 0, SECOND));
+				qouteEnqueuer.enqueue(maker, new NextTuple(symbol, 0, 0, SECOND));
 				statsExpecter.expectNothing();
 			}
-			qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tupleGenerator.nextQuote(symbol, 0, 0, SECOND));
-			statsExpecter.expect(ObjectArrayTupleMaker.MAKER, buildGenericResultTupleObject(symbol));
+			qouteEnqueuer.enqueue(maker, new NextTuple(symbol, 0, 0, SECOND));
+			statsExpecter.expect(ObjectArrayTupleMaker.MAKER, maker.buildGenericResultTupleObject(symbol));
 		}
 	}
 	
@@ -114,13 +83,13 @@ public class TumblingTimeAggTest {
 	 */
 	@Test
 	public void testShufflingSymbols() throws Exception {
-		Object[] testingSymbols = tupleGenerator.getSymbols().toArray();
+		Object[] testingSymbols = maker.getRegisteredSymbols().toArray();
 		Random random = new Random();
 		for (int i = 0; i < 1000; i++){
 			String symbol = (String)testingSymbols[random.nextInt(testingSymbols.length)];
-			qouteEnqueuer.enqueue(CSVTupleMaker.MAKER, tupleGenerator.nextQuote(symbol, 0, 0, SECOND));
+			qouteEnqueuer.enqueue(maker, new NextTuple(symbol, 0, 0, SECOND));
 			if (i > 0 && i % WINDOW_SIZE+1 == 0){
-				statsExpecter.expect(ObjectArrayTupleMaker.MAKER, buildGenericResultTupleObject(symbol));
+				statsExpecter.expect(ObjectArrayTupleMaker.MAKER, maker.buildGenericResultTupleObject(symbol));
 			}
 		}
 	}
@@ -143,6 +112,7 @@ public class TumblingTimeAggTest {
 	 * 						- last quantity = 10
 	 * 						- last time a tuple was fired
 	 */
+	/*
 	private Object[] buildGenericResultTupleObject(String symbol){
 		return new Object[] { 
 				symbol,		// Symbol 
@@ -155,5 +125,6 @@ public class TumblingTimeAggTest {
 				tupleGenerator.getLastTimeWithFormat(),		// LastTime
 				};
 	}
+	*/
 
 }

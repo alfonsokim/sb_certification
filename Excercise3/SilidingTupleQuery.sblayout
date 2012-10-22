@@ -23,7 +23,6 @@
         <param name="gui:y" value="100.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="211,140,843;152,81,177,304,177,303;128,86"/>
     </component>
     <component name="QueryStatsUpdate">
         <param name="gui:x" value="-1064.0"/>
@@ -32,11 +31,10 @@
         <param name="gui:height" value="62.0"/>
     </component>
     <component name="QueryFindStats">
-        <param name="gui:x" value="-952.0"/>
+        <param name="gui:x" value="-944.0"/>
         <param name="gui:y" value="-119.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="121,80,481;87,86,101,174,101,133;128,86"/>
     </component>
     <component name="outall">
         <param name="gui:x" value="-926.0"/>
@@ -50,20 +48,14 @@
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
     </component>
-    <component name="debug">
-        <param name="gui:x" value="-827.0"/>
-        <param name="gui:y" value="10.0"/>
-        <param name="gui:width" value="62.0"/>
-        <param name="gui:height" value="62.0"/>
-    </component>
     <component name="MapRemoveSymCount">
-        <param name="gui:x" value="-722.0"/>
+        <param name="gui:x" value="-708.0"/>
         <param name="gui:y" value="-119.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
     </component>
     <component name="OutStats">
-        <param name="gui:x" value="-602.0"/>
+        <param name="gui:x" value="-574.0"/>
         <param name="gui:y" value="-119.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>

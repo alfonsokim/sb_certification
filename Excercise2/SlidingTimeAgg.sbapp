@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="7.2.6">
+<modify version="7.2.7">
     <add generator="gui">
         <annotations>
             <annotation name="hygienic"/>
@@ -17,7 +17,7 @@
             <param name="dimension-type.0" value="value"/>
             <param name="dimension-value.0" value="Time"/>
             <param name="dimension-advance.0" value="1"/>
-            <param name="dimension-partial.0" value="yes"/>
+            <param name="dimension-partial.0" value="no"/>
             <param name="dimension-size.0" value="${WINDOW_SIZE}"/>
             <param name="output-group-by" value="true"/>
             <target-list>

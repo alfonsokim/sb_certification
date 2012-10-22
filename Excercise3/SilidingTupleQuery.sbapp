@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="7.2.6">
+<modify version="7.2.7">
     <add generator="gui">
         <annotations>
             <annotation name="hygienic"/>
@@ -49,6 +49,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
             </target-list>
             <target-list goal-schema="schema:StatsQueryTable" name="insert">
                 <item name="input" selection="all"/>
@@ -100,7 +101,7 @@
         <box name="QueryFindStats" type="query">
             <dataref id="querytable" name="StatsQueryTable"/>
             <input port="1" stream="out:QueryStatsUpdate_1"/>
-            <output port="1" stream="debug"/>
+            <output port="1" stream="out:QueryFindStats_1"/>
             <param name="operation" value="read"/>
             <param name="where" value="secondary-key"/>
             <param name="limit" value="${WINDOW_SIZE}"/>
@@ -119,6 +120,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
                 <expressions>
                     <include field="Symbol">input1.Symbol</include>
                     <include field="AvgPrice">avg(Price)</include>
@@ -144,13 +146,11 @@
         <output-stream name="outall">
         </output-stream>
         <box name="FilterWindow" type="filter">
-            <input port="1" stream="debug"/>
+            <input port="1" stream="out:QueryFindStats_1"/>
             <output port="1" stream="out:FilterWindow_1"/>
             <param name="autogen-nomatch-port" value="false"/>
             <param name="expression.0" value="SymbolCount &gt;= ${WINDOW_SIZE}"/>
         </box>
-        <output-stream name="debug">
-        </output-stream>
         <box name="MapRemoveSymCount" type="map">
             <input port="1" stream="out:FilterWindow_1"/>
             <output port="1" stream="OutStats"/>
