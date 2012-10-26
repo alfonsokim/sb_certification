@@ -1,7 +1,7 @@
 /**
  * 
  */
-package akim.scd.test;
+package scd.test;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,8 +20,8 @@ import com.streambase.sb.unittest.TupleMaker;
 /**
  * Test tuple generator
  * 
- * Generates tuples according to QuoteSchema
- * 
+ * Generates tuples according to QuoteSchema.
+ *
  * @author Alfonso Kim
  */
 public class TestQuoteTupleMaker implements TupleMaker<NextTuple> {
@@ -33,6 +33,7 @@ public class TestQuoteTupleMaker implements TupleMaker<NextTuple> {
 
 	/**
 	 * Constructor, receives a list of symbols that will be generated with every call
+	 * Each quote tuple is created with the given symbol and initialized with 0 in both quantity and price.
 	 */
 	public TestQuoteTupleMaker(String... symbols) {
 		quotes = new HashMap<String, QuoteData>();
@@ -45,7 +46,7 @@ public class TestQuoteTupleMaker implements TupleMaker<NextTuple> {
 	
 	/**
 	 * @param symbol 	The symbol to get
-	 * @return			The times a symbol has been fired, -1 if the symbol is not registered
+	 * @return			The count a quote with given has been created, -1 if the symbol is not registered
 	 */
 	public int getTupleCount(String symbol){
 		QuoteData quote = quotes.get(symbol);
@@ -101,9 +102,9 @@ public class TestQuoteTupleMaker implements TupleMaker<NextTuple> {
 		return buildGenericResultTupleObject(symbol, getLastTupleDateTime());
 	}
 	
+
 	@Override
-	public Tuple createTuple(Schema schema, NextTuple t)
-			throws StreamBaseException {
+	public Tuple createTuple(Schema schema, NextTuple t) throws StreamBaseException {
 		Tuple returnTuple = schema.createTuple();
 		QuoteData symbolQuote = quotes.get(t.symbol);
 		symbolQuote.update(t);

@@ -1,4 +1,5 @@
-package akim.scd.test;
+package scd.test;
+
 import java.util.Random;
 
 import org.junit.After;
@@ -14,21 +15,21 @@ import com.streambase.sb.unittest.SBServerManager;
 import com.streambase.sb.unittest.ServerManagerFactory;
 
 
-public class SlidingTupleAggTest {
+public class TumblingTupleAggTest {
 
 	private static SBServerManager server;
 	private static Enqueuer qouteEnqueuer;
 	private static Expecter statsExpecter;
 	private static TestQuoteTupleMaker maker;
-	private final static int WINDOW_SIZE = 10;
-	private final static int SECOND = 1;
+	
+	private static int WINDOW_SIZE = 10;
+	private static int SECOND = 1;
 
 	@BeforeClass
 	public static void setupServer() throws Exception {
 		server = ServerManagerFactory.getEmbeddedServer();
 		server.startServer();
-		server.loadApp("SlidingTupleAgg.sbapp");
-		
+		server.loadApp("TumblingTupleAgg.sbapp");
 	}
 
 	@AfterClass
@@ -47,15 +48,6 @@ public class SlidingTupleAggTest {
 		maker = new TestQuoteTupleMaker("AAA", "BBB", "CCC", "DDD", "EEE");
 	}
 
-	/**
-	 * My first test method will test the min, max, standard deviation and 
-	 * lastval(T) functions for given values. 
-	 * 
-	 * In further tests I will assume that you guys have tested those functions a 
-	 * zillion times before. So next test's will check that the application fires 
-	 * tuples when supposed to be fired. In other worlds, The test will focus in 
-	 * receiving tuples when the window closes.
-	 */
 	@Test
 	public void testSingleSymbol() throws Exception {
 		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
@@ -92,7 +84,7 @@ public class SlidingTupleAggTest {
 				statsExpecter.expectNothing();
 			}
 			qouteEnqueuer.enqueue(maker, new NextTuple(symbol, 0, 0, SECOND));
-			statsExpecter.expect(ObjectArrayTupleMaker.MAKER,  maker.buildGenericResultTupleObject(symbol));
+			statsExpecter.expect(ObjectArrayTupleMaker.MAKER, maker.buildGenericResultTupleObject(symbol));
 		}
 	}
 	
@@ -106,7 +98,7 @@ public class SlidingTupleAggTest {
 		for (int i = 0; i < 1000; i++){
 			String symbol = (String)testingSymbols[random.nextInt(testingSymbols.length)];
 			qouteEnqueuer.enqueue(maker, new NextTuple(symbol, 0, 0, SECOND));
-			if (maker.getTupleCount(symbol) >= WINDOW_SIZE){
+			if (maker.getTupleCount(symbol) % WINDOW_SIZE == 0){
 				statsExpecter.expect(ObjectArrayTupleMaker.MAKER, maker.buildGenericResultTupleObject(symbol));
 			} else {
 				statsExpecter.expectNothing();

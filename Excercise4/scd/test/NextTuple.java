@@ -1,10 +1,10 @@
 /**
  * 
  */
-package akim.scd.test;
+package scd.test;
 
 /**
- * Represents the next tuple to send
+ * Represents the next tuple to send according to QuoteSchema.
  * 
  * @author Alfonso Kim
  */

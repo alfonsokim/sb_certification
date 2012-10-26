@@ -1,4 +1,4 @@
-package akim.scd.test;
+package scd.test;
 
 import java.util.Random;
 
@@ -15,21 +15,21 @@ import com.streambase.sb.unittest.SBServerManager;
 import com.streambase.sb.unittest.ServerManagerFactory;
 
 
-public class TumblingTupleQueryTest {
+public class TumblingTimeAggTest {
 
 	private static SBServerManager server;
 	private static Enqueuer qouteEnqueuer;
 	private static Expecter statsExpecter;
 	private static TestQuoteTupleMaker maker;
 	
-	private static int WINDOW_SIZE = 10;
-	private static int SECOND = 1;
+	private final static int WINDOW_SIZE = 10;
+	private final static int SECOND = 1;
 
 	@BeforeClass
 	public static void setupServer() throws Exception {
 		server = ServerManagerFactory.getEmbeddedServer();
 		server.startServer();
-		server.loadApp("TumblingTupleQuery.sbapp");
+		server.loadApp("TumblingTimeAgg.sbapp");
 	}
 
 	@AfterClass
@@ -52,25 +52,15 @@ public class TumblingTupleQueryTest {
 	public void testSingleSymbol() throws Exception {
 		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
 		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
+		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, 2*SECOND));
 		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
+		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, 3*SECOND));
 		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
-		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
-		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
-		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
-		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
-		statsExpecter.expectNothing();
-		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
-		statsExpecter.expectNothing();
+		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, 4*SECOND));
+		
 		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));
 		statsExpecter.expect(ObjectArrayTupleMaker.MAKER, maker.buildGenericResultTupleObject("AAA"));
-
+		
 	}
 	
 	/**
@@ -79,7 +69,7 @@ public class TumblingTupleQueryTest {
 	@Test
 	public void testSequentialSingleSymbol() throws Exception {
 		for (String symbol: maker.getRegisteredSymbols()){
-			for (int i = 0; i < WINDOW_SIZE-1; i++){
+			for (int i = 0; i < WINDOW_SIZE; i++){
 				qouteEnqueuer.enqueue(maker, new NextTuple(symbol, 0, 0, SECOND));
 				statsExpecter.expectNothing();
 			}
@@ -98,10 +88,8 @@ public class TumblingTupleQueryTest {
 		for (int i = 0; i < 1000; i++){
 			String symbol = (String)testingSymbols[random.nextInt(testingSymbols.length)];
 			qouteEnqueuer.enqueue(maker, new NextTuple(symbol, 0, 0, SECOND));
-			if (maker.getTupleCount(symbol) % WINDOW_SIZE == 0){
+			if (i > 0 && i % WINDOW_SIZE+1 == 0){
 				statsExpecter.expect(ObjectArrayTupleMaker.MAKER, maker.buildGenericResultTupleObject(symbol));
-			} else {
-				statsExpecter.expectNothing();
 			}
 		}
 	}
@@ -110,5 +98,33 @@ public class TumblingTupleQueryTest {
 	public void stopContainers() throws Exception {
 		server.stopContainers();
 	}
+	
+	/**
+	 * Builds a generic tuple with default values, given the symbol name
+	 * 
+	 * @param symbol	The symbol name of the generic tuple
+	 * @return			Default values for the generic tuple:
+	 * 						- average price = 10
+	 * 						- max price = 10
+	 * 						- min price = 10
+	 * 						- standard deviation = 0
+	 * 						- last price = 10
+	 * 						- last quantity = 10
+	 * 						- last time a tuple was fired
+	 */
+	/*
+	private Object[] buildGenericResultTupleObject(String symbol){
+		return new Object[] { 
+				symbol,		// Symbol 
+				"10",		// AvgPrice
+				"10",		// MaxPrice
+				"10",		// MinPrice
+				"0",		// StdPrice
+				"10",		// LastPrice
+				"10",		// LastQunatity
+				tupleGenerator.getLastTimeWithFormat(),		// LastTime
+				};
+	}
+	*/
 
 }

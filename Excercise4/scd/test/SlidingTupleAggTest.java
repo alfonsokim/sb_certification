@@ -1,4 +1,4 @@
-package akim.scd.test;
+package scd.test;
 import java.util.Random;
 
 import org.junit.After;
@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.streambase.sb.unittest.CSVTupleMaker;
 import com.streambase.sb.unittest.Enqueuer;
 import com.streambase.sb.unittest.Expecter;
 import com.streambase.sb.unittest.ObjectArrayTupleMaker;
@@ -15,7 +14,7 @@ import com.streambase.sb.unittest.SBServerManager;
 import com.streambase.sb.unittest.ServerManagerFactory;
 
 
-public class SilidingTupleQueryTest {
+public class SlidingTupleAggTest {
 
 	private static SBServerManager server;
 	private static Enqueuer qouteEnqueuer;
@@ -28,7 +27,7 @@ public class SilidingTupleQueryTest {
 	public static void setupServer() throws Exception {
 		server = ServerManagerFactory.getEmbeddedServer();
 		server.startServer();
-		server.loadApp("SilidingTupleQuery.sbapp");
+		server.loadApp("SlidingTupleAgg.sbapp");
 		
 	}
 
@@ -93,7 +92,7 @@ public class SilidingTupleQueryTest {
 				statsExpecter.expectNothing();
 			}
 			qouteEnqueuer.enqueue(maker, new NextTuple(symbol, 0, 0, SECOND));
-			statsExpecter.expect(ObjectArrayTupleMaker.MAKER, maker.buildGenericResultTupleObject(symbol));
+			statsExpecter.expect(ObjectArrayTupleMaker.MAKER,  maker.buildGenericResultTupleObject(symbol));
 		}
 	}
 	
@@ -119,6 +118,6 @@ public class SilidingTupleQueryTest {
 	public void stopContainers() throws Exception {
 		server.stopContainers();
 	}
-
+	
 
 }

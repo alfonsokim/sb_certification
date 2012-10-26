@@ -1,4 +1,4 @@
-package akim.scd.test;
+package scd.test;
 
 import org.junit.After;
 import org.junit.AfterClass;
