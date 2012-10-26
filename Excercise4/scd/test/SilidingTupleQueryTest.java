@@ -101,23 +101,6 @@ public class SilidingTupleQueryTest {
 		}
 	}
 	
-	/**
-	 * Test tuples randomly, a tuple must be received if the window has 10 or more tuples with the same symbol.
-	 */
-	//@Test
-	public void testShufflingSymbols() throws Exception {
-		Object[] testingSymbols = maker.getRegisteredSymbols().toArray();
-		Random random = new Random();
-		for (int i = 0; i < 1000; i++){
-			String symbol = (String)testingSymbols[random.nextInt(testingSymbols.length)];
-			qouteEnqueuer.enqueue(maker, new NextTuple(symbol, 0, 0, SECOND));
-			if (maker.getTupleCount(symbol) >= WINDOW_SIZE){
-				statsExpecter.expect(ObjectArrayTupleMaker.MAKER, maker.buildGenericResultTupleObject(symbol));
-			} else {
-				statsExpecter.expectNothing();
-			}
-		}
-	}
 
 	@After
 	public void stopContainers() throws Exception {
