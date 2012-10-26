@@ -1,7 +1,5 @@
 package scd.test;
 
-import java.util.Random;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -53,10 +51,7 @@ public class SilidingTupleQueryTest {
 	}
 
 	/**
-	 * My first test method will test the min, max, standard deviation and 
-	 * lastval(T) functions for given values. 
-	 * 
-	 * In further tests I will assume that you guys have tested those functions a 
+	 * I will assume that you guys have tested functions a 
 	 * zillion times before. So next test's will check that the application fires 
 	 * tuples when supposed to be fired. In other worlds, The test will focus in 
 	 * receiving tuples when the window closes.

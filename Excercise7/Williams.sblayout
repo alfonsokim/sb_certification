@@ -11,7 +11,6 @@
         <param name="gui:y" value="-61.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="408,274"/>
     </component>
     <component name="ComputePercentR">
         <param name="gui:x" value="-91.0"/>
@@ -30,7 +29,6 @@
         <param name="gui:y" value="-61.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="114,568"/>
     </component>
     <component name="FixSchema">
         <param name="gui:x" value="281.0"/>

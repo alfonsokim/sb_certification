@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="7.2.6">
+<modify version="7.2.7">
     <add generator="gui">
         <implements module-reference="AlgoInterface.sbint"/>
         <import from="AlgoInterface.sbint" postfix="" prefix=""/>

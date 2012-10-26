@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbfs:Simulation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:sbfs="http://www.streambase.com/schemas/feedsim/02/SBFS">
+  <SimStreams Name="QuoteInput">
+    <ProcessingOptions DataGenerationMethod="Custom"/>
+    <Schema>
+      <Fields Name="Symbol" DataTypeName="string" Description="">
+        <Distribution GenerationMethod="Enumerated" UseRandomSize="true" NumRandomEnumValues="1" EnumeratedDistMethod="SpecifiedValues" BlobMinSize="4">
+          <EnumeratedDist weight="1.0" value="AAA"/>
+          <EnumeratedDist weight="1.0" value="BBB"/>
+          <EnumeratedDist weight="0.8" value="CCC"/>
+          <EnumeratedDist weight="1.0" value="DDD"/>
+        </Distribution>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="Price" DataTypeName="double" Description="">
+        <Distribution GenerationMethod="Uniform" MinValue="10.0"/>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="Quantity" DataTypeName="int" Description="">
+        <Distribution GenerationMethod="Uniform" MinValue="10.0" MaxValue="1000.0"/>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="Time" DataTypeName="timestamp" Description="Time increases monotinocally in tuples received from the Caymann Exchange">
+        <Distribution GenerationMethod="Incremented" Cycle="true"/>
+        <DataSourceMapping/>
+      </Fields>
+    </Schema>
+  </SimStreams>
+</sbfs:Simulation>
