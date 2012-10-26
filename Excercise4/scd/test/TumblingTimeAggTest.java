@@ -98,33 +98,5 @@ public class TumblingTimeAggTest {
 	public void stopContainers() throws Exception {
 		server.stopContainers();
 	}
-	
-	/**
-	 * Builds a generic tuple with default values, given the symbol name
-	 * 
-	 * @param symbol	The symbol name of the generic tuple
-	 * @return			Default values for the generic tuple:
-	 * 						- average price = 10
-	 * 						- max price = 10
-	 * 						- min price = 10
-	 * 						- standard deviation = 0
-	 * 						- last price = 10
-	 * 						- last quantity = 10
-	 * 						- last time a tuple was fired
-	 */
-	/*
-	private Object[] buildGenericResultTupleObject(String symbol){
-		return new Object[] { 
-				symbol,		// Symbol 
-				"10",		// AvgPrice
-				"10",		// MaxPrice
-				"10",		// MinPrice
-				"0",		// StdPrice
-				"10",		// LastPrice
-				"10",		// LastQunatity
-				tupleGenerator.getLastTimeWithFormat(),		// LastTime
-				};
-	}
-	*/
 
 }

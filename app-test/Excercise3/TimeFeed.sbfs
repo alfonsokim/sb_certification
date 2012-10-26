@@ -2,7 +2,7 @@
 <sbfs:Simulation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:sbfs="http://www.streambase.com/schemas/feedsim/02/SBFS">
   <SimStreams Name="InQuote">
     <ProcessingOptions DataGenerationMethod="DataFile">
-      <DataSource Name="DataSource" DataSourceURI="testTuples.csv" QuoteChar="34"/>
+      <DataSource Name="DataSource" DataSourceURI="test_tuples.csv" QuoteChar="34"/>
     </ProcessingOptions>
     <Schema>
       <Fields Name="Symbol" DataTypeName="string" Description="">

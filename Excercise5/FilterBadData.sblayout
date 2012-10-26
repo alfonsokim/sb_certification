@@ -19,12 +19,6 @@
         <param name="gui:height" value="62.0"/>
         <param name="gui:columnwidths" value="157,784"/>
     </component>
-    <component name="Map">
-        <param name="gui:x" value="-144.0"/>
-        <param name="gui:y" value="-22.0"/>
-        <param name="gui:width" value="62.0"/>
-        <param name="gui:height" value="62.0"/>
-    </component>
     <component name="SlidingTupleAgg">
         <param name="gui:x" value="-133.0"/>
         <param name="gui:y" value="-127.0"/>

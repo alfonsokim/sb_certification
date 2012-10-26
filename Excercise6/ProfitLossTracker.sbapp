@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="7.2.6">
+<modify version="7.2.7">
     <add generator="gui">
         <implements module-reference="PositionKeeperInterface.sbint"/>
         <import from="PositionKeeperInterface.sbint" postfix="" prefix=""/>
@@ -61,6 +61,7 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="all"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list goal-schema="PositionSchema" name="insert">
                 <item name="input" selection="all"/>
@@ -211,8 +212,7 @@
             <input port="2" stream="out:QueryUpdate_1"/>
             <input port="3" stream="out:QueryDelete_1"/>
             <output port="1" stream="IndividualTraderOutput"/>
-            <param name="strict" value="true"/>
-            <param name="schema" value="IndividualTraderSchema"/>
+            <param name="strict" value="false"/>
             <param name="strict" value="true"/>
             <param name="schema" value="IndividualTraderSchema"/>
         </box>

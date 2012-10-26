@@ -47,15 +47,7 @@ public class SlidingTupleAggTest {
 		maker = new TestQuoteTupleMaker("AAA", "BBB", "CCC", "DDD", "EEE");
 	}
 
-	/**
-	 * My first test method will test the min, max, standard deviation and 
-	 * lastval(T) functions for given values. 
-	 * 
-	 * In further tests I will assume that you guys have tested those functions a 
-	 * zillion times before. So next test's will check that the application fires 
-	 * tuples when supposed to be fired. In other worlds, The test will focus in 
-	 * receiving tuples when the window closes.
-	 */
+
 	@Test
 	public void testSingleSymbol() throws Exception {
 		qouteEnqueuer.enqueue(maker, new NextTuple("AAA", 0, 0, SECOND));

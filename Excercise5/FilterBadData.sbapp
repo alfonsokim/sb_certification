@@ -28,16 +28,6 @@
             <param name="expression.0" value="( now() - seconds(${NumSeconds}) &gt;= Time) and (Quantity &lt;= ${NumShares})"/>
             <param name="expression.1" value="true"/>
         </box>
-        <box name="Map" type="map">
-            <input port="1" stream="out:FilterTimeQttyQuotes_2"/>
-            <output port="1" stream="out:Map_1"/>
-            <target-list>
-                <item name="input" selection="all"/>
-                <expressions>
-                    <include field="delta">(now()-seconds(5)) &gt;= Time</include>
-                </expressions>
-            </target-list>
-        </box>
         <module-reference name="SlidingTupleAgg">
             <param name="file" value="SlidingTupleAgg.sbapp"/>
             <input name="InQuote" port="1" stream="out:FilterTimeQttyQuotes_1"/>
