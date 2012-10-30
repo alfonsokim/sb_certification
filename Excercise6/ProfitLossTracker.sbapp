@@ -52,7 +52,7 @@
             <param name="key-field.0" value="Wealth"/>
             <param name="key-lowerbound-operation.0" value="begin"/>
             <param name="key-upperbound-value.0" value="0"/>
-            <param name="key-upperbound-operation.0" value="lt"/>
+            <param name="key-upperbound-operation.0" value="le"/>
             <param name="write-type" value="insert"/>
             <param name="if-write-fails" value="ignore"/>
             <param name="no-match-mode" value="output-no-match-nothing"/>
@@ -60,8 +60,6 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="old" selection="all"/>
-                <item name="new" selection="none"/>
-                <item name="current" selection="none"/>
             </target-list>
             <target-list goal-schema="PositionSchema" name="insert">
                 <item name="input" selection="all"/>
@@ -134,16 +132,15 @@
             <param name="operation" value="write"/>
             <param name="where" value="primary-key"/>
             <param name="key-field.0" value="TraderName"/>
-            <param name="key-value.0" value="TraderName"/>
-            <param name="write-type" value="insert"/>
-            <param name="if-write-fails" value="force"/>
+            <param name="key-value.0" value="input1.TraderName"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
             <param name="no-match-mode" value="output-no-match-null"/>
             <param name="order-by-direction" value="none"/>
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
-                <item name="current" selection="none"/>
                 <expressions>
                     <include field="TraderName">input1.TraderName</include>
                     <include field="Wealth">old.Wealth</include>
@@ -152,19 +149,23 @@
             <target-list goal-schema="PositionSchema_logical_value" name="insert">
                 <item name="input" selection="none"/>
                 <expressions>
-                    <set field="Wealth">Wealth + input1.Wealth</set>
-                    <set field="Time">now()</set>
-                </expressions>
-            </target-list>
-            <target-list goal-schema="PositionSchema" name="update">
-                <item name="input" selection="all"/>
-                <expressions>
                     <set field="Symbol">string(null)</set>
                     <set field="Price">double(0)</set>
                     <set field="Quantity">int(0)</set>
                     <set field="Position">string(null)</set>
-                    <set field="Wealth">Wealth</set>
+                    <set field="Wealth">input1.Wealth</set>
                     <set field="Time">now()</set>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="PositionSchema_logical_value" name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="Wealth">old.Wealth + input1.Wealth</set>
+                    <set field="Time">now()</set>
+                    <set field="Symbol">old.Symbol</set>
+                    <set field="Price">old.Price</set>
+                    <set field="Quantity">old.Quantity</set>
+                    <set field="Position">old.Position</set>
                 </expressions>
             </target-list>
             <target-list goal-schema="PositionSchema" name="no-match">
@@ -192,7 +193,7 @@
             <target-list goal-schema="PositionSchema" name="insert">
                 <item name="input" selection="all"/>
             </target-list>
-            <target-list goal-schema="PositionSchema" name="update">
+            <target-list goal-schema="PositionSchema_logical_value" name="update">
                 <item name="input" selection="none"/>
                 <expressions>
                     <set field="Symbol">input1.Symbol</set>
@@ -203,7 +204,7 @@
                     <set field="Wealth">Wealth + (updateValue*input1.Price*input1.Quantity)</set>
                 </expressions>
             </target-list>
-            <target-list goal-schema="PositionSchema" name="no-match">
+            <target-list goal-schema="PositionSchema_logical_value" name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
         </box>
@@ -212,7 +213,8 @@
             <input port="2" stream="out:QueryUpdate_1"/>
             <input port="3" stream="out:QueryDelete_1"/>
             <output port="1" stream="IndividualTraderOutput"/>
-            <param name="strict" value="false"/>
+            <param name="strict" value="true"/>
+            <param name="schema" value="IndividualTraderSchema"/>
             <param name="strict" value="true"/>
             <param name="schema" value="IndividualTraderSchema"/>
         </box>
@@ -227,6 +229,15 @@
         <output-stream name="IndividualTraderOutput" schema="IndividualTraderSchema">
         </output-stream>
         <output-stream name="PositionOuput" schema="PositionSchema">
+        </output-stream>
+        <box name="UnionError" type="union">
+            <input port="1" stream="out:FilterUpdated_2"/>
+            <input port="2" stream="out:FilterPosition_2"/>
+            <output port="1" stream="ErrorOutput"/>
+            <param name="strict" value="false"/>
+            <param name="strict" value="false"/>
+        </box>
+        <output-stream name="ErrorOutput">
         </output-stream>
     </add>
 </modify>

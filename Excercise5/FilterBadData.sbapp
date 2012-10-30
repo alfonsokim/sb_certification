@@ -67,7 +67,7 @@
                 </expressions>
             </target-list>
         </box>
-        <output-stream name="GoodQuotesOutput">
+        <output-stream name="GoodQuotesOutput" schema="QuoteSchema">
         </output-stream>
         <box name="Union" type="union">
             <input port="1" stream="out:MapBadQuotes_1"/>
@@ -79,7 +79,7 @@
             <param name="strict" value="true"/>
             <param name="schema" value="QuoteSchema"/>
         </box>
-        <output-stream name="BadQuotesOutput">
+        <output-stream name="BadQuotesOutput" schema="QuoteSchema">
         </output-stream>
     </add>
 </modify>

@@ -41,6 +41,7 @@
         <param name="gui:y" value="12.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="98,65,394;71,38,83,142,83,140;128,86"/>
     </component>
     <component name="MapOutSchema">
         <param name="gui:x" value="90.0"/>
@@ -65,6 +66,7 @@
         <param name="gui:y" value="150.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="210,139,845;152,81,178,304,178,301;128,86"/>
     </component>
     <component name="QueryUpdateWealth">
         <param name="gui:x" value="222.0"/>
@@ -93,6 +95,18 @@
     <component name="PositionOuput">
         <param name="gui:x" value="508.0"/>
         <param name="gui:y" value="-136.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="UnionError">
+        <param name="gui:x" value="494.0"/>
+        <param name="gui:y" value="-24.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="ErrorOutput">
+        <param name="gui:x" value="614.0"/>
+        <param name="gui:y" value="-24.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
     </component>

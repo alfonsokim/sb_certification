@@ -146,10 +146,17 @@ public class TestQuoteTupleMaker implements TupleMaker<NextTuple> {
 	 * Representation of a QuoteSchema 
 	 */
 	private class QuoteData {
+		
 		public String symbol;
 		public double price;
 		public int quantity;
 		public int tupleCount;
+		// variables for statistics
+		private double minPrice;
+		private double maxPrice;
+		private double sumPrice;
+		private double sumPrice2;
+		
 		
 		/**
 		 * Creates a new QuoteData with given symbol and default price and quantity = 10
@@ -172,8 +179,16 @@ public class TestQuoteTupleMaker implements TupleMaker<NextTuple> {
 		 * @param secondsInc seconds increment
 		 */
 		private QuoteData update(NextTuple nt){
-			this.price += nt.deltaPrice;
-			this.quantity += nt.deltaQuantity;
+			price += nt.deltaPrice;
+			quantity += nt.deltaQuantity;
+			if (price < minPrice){
+				minPrice = price;
+			}
+			if (price > maxPrice){
+				maxPrice = price;
+			}
+			sumPrice += price;
+			sumPrice2 += (price * price);
 			return this;
 		}
 		
