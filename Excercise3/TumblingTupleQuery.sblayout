@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <application-layout>
     <component name="StatsQueryTable">
-        <param name="gui:x" value="-150.0"/>
-        <param name="gui:y" value="96.0"/>
-        <param name="gui:width" value="168.0"/>
-        <param name="gui:height" value="63.0"/>
+        <param name="gui:x" value="-158.0"/>
+        <param name="gui:y" value="24.0"/>
+        <param name="gui:width" value="188.0"/>
+        <param name="gui:height" value="66.0"/>
     </component>
     <component name="InQuote">
-        <param name="gui:x" value="-470.0"/>
+        <param name="gui:x" value="-573.0"/>
+        <param name="gui:y" value="-94.0"/>
+        <param name="gui:width" value="62.0"/>
+        <param name="gui:height" value="62.0"/>
+    </component>
+    <component name="SeqQuote">
+        <param name="gui:x" value="-460.0"/>
         <param name="gui:y" value="-94.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
@@ -17,14 +23,14 @@
         <param name="gui:y" value="-94.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="120,80,482;87,46,101,173,101,174;128,86"/>
+        <param name="gui:columnwidths" value="98,66,393;71,38,83,142,83,140;128,86"/>
     </component>
     <component name="QueryFindStats">
         <param name="gui:x" value="-241.0"/>
         <param name="gui:y" value="-94.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="120,80,482;87,46,101,173,101,174;128,86"/>
+        <param name="gui:columnwidths" value="98,66,393;71,38,83,142,83,140;128,86"/>
     </component>
     <component name="FilterWindow">
         <param name="gui:x" value="-120.0"/>
@@ -45,10 +51,11 @@
         <param name="gui:height" value="62.0"/>
     </component>
     <component name="QueryTruncate">
-        <param name="gui:x" value="113.0"/>
-        <param name="gui:y" value="-44.0"/>
+        <param name="gui:x" value="123.0"/>
+        <param name="gui:y" value="-38.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="98,66,393;71,91,83,142,83,87;128,86"/>
     </component>
     <component name="OutStats">
         <param name="gui:x" value="239.0"/>

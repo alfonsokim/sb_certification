@@ -88,6 +88,7 @@ public class SlidingTupleAggTest {
 		}
 	}
 	
+	
 	/**
 	 * Test tuples randomly, a tuple must be received if the window has 10 or more tuples with the same symbol.
 	 */

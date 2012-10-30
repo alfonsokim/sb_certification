@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="7.2.6">
+<modify version="7.2.7">
     <add generator="gui">
         <annotations>
             <annotation name="hygienic"/>
@@ -8,7 +8,7 @@
         <parameter-definitions>
             <parameter default="10" name="WINDOW_SIZE"/>
         </parameter-definitions>
-        <schema name="schema:QuoteSchema">
+        <schema name="schema:InQuote">
             <field description="" name="Symbol" type="string"/>
             <field description="" name="Price" type="double"/>
             <field description="" name="Quantity" type="int"/>
@@ -18,13 +18,12 @@
             <parent-schemas>
                 <parent-schema name="QuoteSchema"/>
             </parent-schemas>
+            <field description="" name="QuoteId" type="long"/>
         </schema>
         <data name="StatsQueryTable" type="querytable">
             <param name="primary-index-type" value="btree"/>
-            <param name="key.0" value="Symbol"/>
-            <param name="key.1" value="Price"/>
-            <param name="key.2" value="Quantity"/>
-            <param name="key.3" value="Time"/>
+            <param name="key.0" value="QuoteId"/>
+            <param name="key.1" value="Symbol"/>
             <param name="index-type.0" value="btree"/>
             <param name="index.0" value="Time,Symbol"/>
             <param name="storage-method" value="memory"/>
@@ -34,22 +33,25 @@
             <param name="truncate" value="false"/>
             <preload format="csv" mode="empty"/>
         </data>
-        <stream name="InQuote" schema="schema:QuoteSchema">
+        <stream name="InQuote" schema="schema:InQuote">
         </stream>
+        <box name="SeqQuote" type="seqnum">
+            <input port="1" stream="InQuote"/>
+            <output port="1" stream="out:SeqQuote_1"/>
+            <param name="output-field" value="QuoteId"/>
+            <param name="sequence-id" value="sequenceId"/>
+            <param name="update-expression" value="sequenceId + 1"/>
+        </box>
         <box name="QueryStatsUpdate" type="query">
             <dataref id="querytable" name="StatsQueryTable"/>
-            <input port="1" stream="InQuote"/>
+            <input port="1" stream="out:SeqQuote_1"/>
             <output port="1" stream="out:QueryStatsUpdate_1"/>
             <param name="operation" value="write"/>
             <param name="where" value="primary-key"/>
-            <param name="key-field.0" value="Symbol"/>
-            <param name="key-value.0" value="Symbol"/>
-            <param name="key-field.1" value="Price"/>
-            <param name="key-value.1" value="Price"/>
-            <param name="key-field.2" value="Quantity"/>
-            <param name="key-value.2" value="Quantity"/>
-            <param name="key-field.3" value="Time"/>
-            <param name="key-value.3" value="Time"/>
+            <param name="key-field.0" value="QuoteId"/>
+            <param name="key-value.0" value="QuoteId"/>
+            <param name="key-field.1" value="Symbol"/>
+            <param name="key-value.1" value="Symbol"/>
             <param name="write-type" value="insert"/>
             <param name="if-write-fails" value="force"/>
             <param name="no-match-mode" value="output-no-match-null"/>
@@ -62,7 +64,7 @@
                     <include field="Symbol">input1.Symbol</include>
                 </expressions>
             </target-list>
-            <target-list goal-schema="schema:StatsQueryTable_logical_value" name="insert">
+            <target-list goal-schema="schema:StatsQueryTable" name="insert">
                 <item name="input" selection="all"/>
             </target-list>
             <target-list goal-schema="schema:StatsQueryTable" name="update">
@@ -104,6 +106,7 @@
                     <include field="LastQuantity">lastval(current.Quantity)</include>
                     <include field="LastTime">lastval(current.Time)</include>
                     <include field="SymbolCount">count(current.Symbol)</include>
+                    <include field="MinQuoteId">min(QuoteId)</include>
                 </expressions>
             </target-list>
             <target-list goal-schema="schema:StatsQueryTable" name="insert">
@@ -135,6 +138,7 @@
                 <item name="input" selection="all"/>
                 <expressions>
                     <remove field="SymbolCount"/>
+                    <remove field="MinQuoteId"/>
                 </expressions>
             </target-list>
         </box>
@@ -142,8 +146,13 @@
             <dataref id="querytable" name="StatsQueryTable"/>
             <input port="1" stream="out:SplitTruncate_2"/>
             <param name="operation" value="delete"/>
-            <param name="where" value="expression"/>
-            <param name="where-expression" value="current.Symbol == input1.Symbol"/>
+            <param name="where" value="secondary-key"/>
+            <param name="key-field.0" value="Time"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="key-field.1" value="Symbol"/>
+            <param name="key-lowerbound-value.1" value="Symbol"/>
+            <param name="key-lowerbound-operation.1" value="eq"/>
             <param name="write-type" value="insert"/>
             <param name="if-write-fails" value="ignore"/>
             <param name="no-match-mode" value="output-no-match-null"/>
@@ -151,8 +160,6 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
-                <item name="new" selection="none"/>
-                <item name="current" selection="none"/>
             </target-list>
             <target-list goal-schema="schema:StatsQueryTable" name="insert">
                 <item name="input" selection="all"/>
