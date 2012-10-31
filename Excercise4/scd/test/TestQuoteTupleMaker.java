@@ -151,11 +151,6 @@ public class TestQuoteTupleMaker implements TupleMaker<NextTuple> {
 		public double price;
 		public int quantity;
 		public int tupleCount;
-		// variables for statistics
-		private double minPrice;
-		private double maxPrice;
-		private double sumPrice;
-		private double sumPrice2;
 		
 		
 		/**
@@ -181,14 +176,6 @@ public class TestQuoteTupleMaker implements TupleMaker<NextTuple> {
 		private QuoteData update(NextTuple nt){
 			price += nt.deltaPrice;
 			quantity += nt.deltaQuantity;
-			if (price < minPrice){
-				minPrice = price;
-			}
-			if (price > maxPrice){
-				maxPrice = price;
-			}
-			sumPrice += price;
-			sumPrice2 += (price * price);
 			return this;
 		}
 		

@@ -23,13 +23,13 @@
         <param name="gui:y" value="-119.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="98,65,394;71,38,83,142,83,140;128,86"/>
     </component>
     <component name="QueryFindStats">
         <param name="gui:x" value="-944.0"/>
         <param name="gui:y" value="-119.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
+        <param name="gui:columnwidths" value="107,71,428;78,42,91,154,91,150;128,86"/>
     </component>
     <component name="FilterWindow">
         <param name="gui:x" value="-831.0"/>
@@ -54,7 +54,6 @@
         <param name="gui:y" value="-70.0"/>
         <param name="gui:width" value="62.0"/>
         <param name="gui:height" value="62.0"/>
-        <param name="gui:columnwidths" value="98,65,394;71,100,83,142,83,78;128,86"/>
     </component>
     <component name="OutStats">
         <param name="gui:x" value="-469.0"/>

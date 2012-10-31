@@ -8,7 +8,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ SilidingTupleQueryTest.class, SlidingTimeAggTest.class,
+@SuiteClasses({ SlidingTupleQueryTest.class, SlidingTimeAggTest.class,
 				SlidingTupleAggTest.class, TumblingTimeAggTest.class,
 				TumblingTupleAggTest.class, TumblingTupleQueryTest.class 
 			  })

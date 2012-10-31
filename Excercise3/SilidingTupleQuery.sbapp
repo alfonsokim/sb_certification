@@ -54,11 +54,12 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
                 <expressions>
                     <include field="Symbol">input1.Symbol</include>
                 </expressions>
             </target-list>
-            <target-list goal-schema="schema:StatsQueryTable" name="insert">
+            <target-list goal-schema="schema:StatsQueryTable_logical_value" name="insert">
                 <item name="input" selection="all"/>
             </target-list>
             <target-list goal-schema="schema:StatsQueryTable" name="update">
@@ -90,21 +91,20 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
-                <item name="old" selection="none"/>
-                <item name="new" selection="none"/>
                 <expressions>
-                    <include field="Symbol">input1.Symbol</include>
                     <include field="AvgPrice">avg(Price)</include>
                     <include field="MaxPrice">max(Price)</include>
                     <include field="MinPrice">min(Price)</include>
                     <include field="StdPrice">stdev(Price)</include>
-                    <include field="LastPrice">lastval(Price)</include>
-                    <include field="LastQuantity">lastval(Quantity)</include>
-                    <include field="LastTime">max(Time)</include>
+                    <include field="LastPrice">firstval(Price)</include>
+                    <include field="LastQuantity">firstval(Quantity)</include>
+                    <include field="LastTime">firstval(Time)</include>
                     <include field="SymbolCount">count(current.Symbol)</include>
-                    <include field="MinQuoteId">min(current.QuoteId)</include>
+                    <include field="MinQuoteId">min(QuoteId)</include>
                 </expressions>
             </target-list>
+            <param name="group-by-name.0" value="Symbol"/>
+            <param name="group-by.0" value="input1.Symbol"/>
             <target-list goal-schema="schema:StatsQueryTable" name="insert">
                 <item name="input" selection="all"/>
             </target-list>
@@ -157,6 +157,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list goal-schema="schema:StatsQueryTable" name="insert">
                 <item name="input" selection="all"/>
