@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="7.2.6">
+<modify version="7.2.7">
     <add generator="gui">
         <annotations>
             <annotation name="hygienic"/>
@@ -16,7 +16,7 @@
             <param name="dimension-name.0" value="TimeBasedDimm"/>
             <param name="dimension-type.0" value="predicate"/>
             <param name="dimension-partial.0" value="no"/>
-            <param name="dimension-close-predicate.0" value="(lastval(input1.Time) - firstval(input1.Time)) &gt;= seconds(${WINDOW_SIZE})"/>
+            <param name="dimension-close-predicate.0" value="to_seconds(lastval(input1.Time) - firstval(input1.Time)) &gt;= ${WINDOW_SIZE}"/>
             <param name="output-group-by" value="true"/>
             <target-list>
                 <expressions>
