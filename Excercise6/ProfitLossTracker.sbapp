@@ -60,6 +60,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="old" selection="all"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list goal-schema="PositionSchema" name="insert">
                 <item name="input" selection="all"/>
@@ -146,7 +147,7 @@
                     <include field="Wealth">old.Wealth</include>
                 </expressions>
             </target-list>
-            <target-list goal-schema="PositionSchema_logical_value" name="insert">
+            <target-list goal-schema="PositionSchema" name="insert">
                 <item name="input" selection="none"/>
                 <expressions>
                     <set field="Symbol">string(null)</set>
@@ -157,7 +158,7 @@
                     <set field="Time">now()</set>
                 </expressions>
             </target-list>
-            <target-list goal-schema="PositionSchema_logical_value" name="update">
+            <target-list goal-schema="PositionSchema" name="update">
                 <item name="input" selection="none"/>
                 <expressions>
                     <set field="Wealth">old.Wealth + input1.Wealth</set>

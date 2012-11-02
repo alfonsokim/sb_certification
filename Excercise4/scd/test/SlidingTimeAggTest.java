@@ -13,7 +13,10 @@ import com.streambase.sb.unittest.ObjectArrayTupleMaker;
 import com.streambase.sb.unittest.SBServerManager;
 import com.streambase.sb.unittest.ServerManagerFactory;
 
-
+/**
+ * 
+ * @author Alfonso Kim
+ */
 public class SlidingTimeAggTest {
 
 	private static SBServerManager server;
@@ -76,7 +79,7 @@ public class SlidingTimeAggTest {
 				43.0,		// AvgPrice
 				80.0,		// MaxPrice
 				10.0,		// MinPrice
-				23.35713072,		// StdPrice
+				23.357131,	// StdPrice
 				80.0,		// LastPrice
 				50,			// LastQunatity
 				"2012-10-10 12:00:09.000-0600",	// LastTime
@@ -87,7 +90,7 @@ public class SlidingTimeAggTest {
 				51.0,		// AvgPrice
 				90.0,		// MaxPrice
 				15.0,		// MinPrice
-				24.4722064573,		// StdPrice
+				24.472206,	// StdPrice
 				90.0,		// LastPrice
 				50,			// LastQunatity
 				"2012-10-10 12:00:10.000-0600",	// LastTime
@@ -97,7 +100,7 @@ public class SlidingTimeAggTest {
 	
 	/**
 	 * This also will test aggregate functions with 2 symbols
-	 * given price and quantity not increasing monotonically
+	 * Price and quantity not increasing monotonically
 	 */
 	@Test
 	public void testMultipleQuoteAggregateFunctions() throws Exception{
@@ -133,7 +136,7 @@ public class SlidingTimeAggTest {
 				257.22,		// AvgPrice
 				443.1,		// MaxPrice
 				54.2,		// MinPrice
-				154.688192826,		// StdPrice
+				154.688193,	// StdPrice
 				443.1,		// LastPrice
 				54,			// LastQunatity
 				"2012-10-10 12:00:08.000-0600",	// LastTime
@@ -144,7 +147,7 @@ public class SlidingTimeAggTest {
 				71.0,		// AvgPrice
 				90.0,		// MaxPrice
 				55.0,		// MinPrice
-				14.317821063276,		// StdPrice
+				14.317821,	// StdPrice
 				55.0,		// LastPrice
 				30,			// LastQunatity
 				"2012-10-10 12:00:09.000-0600",	// LastTime
@@ -156,7 +159,7 @@ public class SlidingTimeAggTest {
 				229.38,		// AvgPrice
 				443.1,		// MaxPrice
 				9.1,		// MinPrice
-				188.10793975,		// StdPrice
+				188.107940,	// StdPrice
 				9.1,		// LastPrice
 				970,			// LastQunatity
 				"2012-10-10 12:00:10.000-0600",	// LastTime

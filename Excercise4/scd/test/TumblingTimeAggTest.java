@@ -15,7 +15,9 @@ import com.streambase.sb.unittest.ObjectArrayTupleMaker;
 import com.streambase.sb.unittest.SBServerManager;
 import com.streambase.sb.unittest.ServerManagerFactory;
 
-
+/**
+ * @author Alfonso Kim
+ */
 public class TumblingTimeAggTest {
 
 	private static SBServerManager server;

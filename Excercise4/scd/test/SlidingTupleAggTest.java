@@ -14,7 +14,10 @@ import com.streambase.sb.unittest.ObjectArrayTupleMaker;
 import com.streambase.sb.unittest.SBServerManager;
 import com.streambase.sb.unittest.ServerManagerFactory;
 
-
+/**
+ * 
+ * @author Alfonso Kim
+ */
 public class SlidingTupleAggTest {
 
 	private static SBServerManager server;
@@ -79,7 +82,7 @@ public class SlidingTupleAggTest {
 				43.0,		// AvgPrice
 				80.0,		// MaxPrice
 				10.0,		// MinPrice
-				23.357130721806467,		// StdPrice
+				23.357131,	// StdPrice
 				80.0,		// LastPrice
 				50,			// LastQunatity
 				"2012-10-10 12:00:09.000-0600",	// LastTime
@@ -90,7 +93,7 @@ public class SlidingTupleAggTest {
 				51.0,		// AvgPrice
 				90.0,		// MaxPrice
 				15.0,		// MinPrice
-				24.472206,		// StdPrice
+				24.472206,	// StdPrice
 				90.0,		// LastPrice
 				50,			// LastQunatity
 				"2012-10-10 12:00:10.000-0600",	// LastTime
@@ -156,7 +159,7 @@ public class SlidingTupleAggTest {
 				299.32,		// AvgPrice
 				901.2,		// MaxPrice
 				9.1,		// MinPrice
-				275.0849234529,		// StdPrice
+				275.084923,	// StdPrice
 				9.1,		// LastPrice
 				970,			// LastQunatity
 				"2012-10-10 12:00:18.000-0600",	// LastTime
@@ -167,7 +170,7 @@ public class SlidingTupleAggTest {
 				51.0,		// AvgPrice
 				90.0,		// MaxPrice
 				15.0,		// MinPrice
-				24.472206457303,		// StdPrice
+				24.472206,	// StdPrice
 				15.0,		// LastPrice
 				10,			// LastQunatity
 				"2012-10-10 12:00:19.000-0600",	// LastTime
@@ -179,7 +182,7 @@ public class SlidingTupleAggTest {
 				383.2,		// AvgPrice
 				987.1,		// MaxPrice
 				9.1,		// MinPrice
-				343.336760500,		// StdPrice
+				343.336760,	// StdPrice
 				987.1,		// LastPrice
 				422,			// LastQunatity
 				"2012-10-10 12:00:20.000-0600",	// LastTime
@@ -190,7 +193,7 @@ public class SlidingTupleAggTest {
 				43.0,		// AvgPrice
 				80.0,		// MaxPrice
 				10.0,		// MinPrice
-				23.35713072,		// StdPrice
+				23.357130,	// StdPrice
 				10.0,		// LastPrice
 				10,			// LastQunatity
 				"2012-10-10 12:00:21.000-0600",	// LastTime
